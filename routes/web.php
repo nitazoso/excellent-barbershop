@@ -40,4 +40,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
     Route::get('/bookings', [AdminBookingController::class, 'index'])
         ->name('bookings');
+
+    Route::get('/bookings/report', [AdminBookingController::class, 'report'])
+        ->name('bookings.report');
+
+    Route::get('/bookings/export-pdf', [AdminBookingController::class, 'exportPdf'])
+        ->name('bookings.export-pdf');
+
+    Route::match(['post', 'patch'], '/bookings/{booking}/confirm', [AdminBookingController::class, 'confirm'])
+        ->name('bookings.confirm');
+
+    Route::match(['post', 'patch'], '/bookings/{booking}/reject', [AdminBookingController::class, 'reject'])
+        ->name('bookings.reject');
 });
