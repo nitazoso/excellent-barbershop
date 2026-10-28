@@ -41,22 +41,25 @@ Route::post('/cek-booking', [CheckBookingController::class, 'check'])
 $adminPath = config('services.admin.path', env('ADMIN_PATH', 'ctrl-excellent'));
 
 Route::prefix($adminPath)->name('admin.')->group(function () use ($adminPath): void {
-    Route::redirect('/', '/'.$adminPath.'/dashboard')->name('index');
+    Route::redirect('/', '/' . $adminPath . '/dashboard')->name('index');
 
     Route::middleware(['throttle:10,1'])->group(function (): void {
         Route::get('/login', [GoogleAuthController::class, 'showLogin'])->name('login');
         Route::get('/auth/google', [GoogleAuthController::class, 'redirect'])->name('google.redirect');
     });
 
-    Route::get('/auth/google/callback', [GoogleAuthController::class, 'callback'])->name('google.callback');
-    Route::post('/logout', [GoogleAuthController::class, 'logout'])->name('logout');
+    Route::get('/bookings', [AdminBookingController::class, 'index'])
+        ->name('bookings');
 
-    Route::middleware(['auth', 'admin'])->group(function (): void {
-        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
-        Route::get('/bookings', [AdminBookingController::class, 'index'])->name('bookings');
+    Route::get('/bookings/report', [AdminBookingController::class, 'report'])
+        ->name('bookings.report');
 
-        Route::get('/admins', [AdminManagementController::class, 'index'])->name('admins.index');
-        Route::post('/admins', [AdminManagementController::class, 'store'])->name('admins.store');
-        Route::patch('/admins/{user}/toggle-status', [AdminManagementController::class, 'toggleStatus'])->name('admins.toggle-status');
-    });
+    Route::get('/bookings/export-pdf', [AdminBookingController::class, 'exportPdf'])
+        ->name('bookings.export-pdf');
+
+    Route::match(['post', 'patch'], '/bookings/{booking}/confirm', [AdminBookingController::class, 'confirm'])
+        ->name('bookings.confirm');
+
+    Route::match(['post', 'patch'], '/bookings/{booking}/reject', [AdminBookingController::class, 'reject'])
+        ->name('bookings.reject');
 });
