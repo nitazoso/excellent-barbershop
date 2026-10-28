@@ -56,3 +56,35 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Setup Google Login
+
+Untuk mengaktifkan autentikasi admin via Google OAuth:
+
+1. **Buat OAuth Client di Google Cloud Console**:
+   - Buka [Google Cloud Console](https://console.cloud.google.com/).
+   - Buat proyek baru atau pilih proyek yang sudah ada.
+   - Buka menu **APIs & Services** > **Credentials**.
+   - Klik **Create Credentials** > **OAuth Client ID**.
+   - Pilih Application type: **Web application**.
+
+2. **Daftarkan Authorized Redirect URI**:
+   - Tambahkan URL redirect untuk lokal dan production pada **Authorized redirect URIs**:
+     - Lokal: `http://localhost:8000/{ADMIN_PATH}/auth/google/callback` (misalnya: `http://localhost:8000/ctrl-excellent/auth/google/callback`)
+     - Production: `https://your-domain.com/{ADMIN_PATH}/auth/google/callback`
+   - Simpan kredensial.
+
+3. **Konfigurasi Environment Variable (`.env`)**:
+   - Masukkan Client ID, Client Secret, dan email admin yang diizinkan:
+     ```env
+     ADMIN_PATH=ctrl-excellent
+     ADMIN_EMAILS=admin@example.com
+
+     GOOGLE_CLIENT_ID=your-google-client-id
+     GOOGLE_CLIENT_SECRET=your-google-client-secret
+     GOOGLE_REDIRECT_URI="${APP_URL}/ctrl-excellent/auth/google/callback"
+     ```
+   - Jalankan seeder untuk mendaftarkan akun admin:
+     ```bash
+     php artisan db:seed --class=AdminSeeder
+     ```
