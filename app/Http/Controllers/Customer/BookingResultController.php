@@ -29,7 +29,7 @@ class BookingResultController extends Controller
         $content .= "CABANG UTAMA SANUR · SIGNATURE SUITE\n";
         $content .= "Jl. Selameti No. 42, Senur · Senopati\n\n";
         $content .= "KODE RESERVASI: {$booking->booking_code}\n";
-        $content .= "Jadwal: {$booking->booking_date->format('d M Y')} · WIB\n";
+        $content .= "Jadwal Sesi: {$booking->booking_date->format('d M Y')} · WIB\n";
         $content .= "Klien: {$booking->customer->name}\n";
         $content .= "Master Barber: {$booking->barber->name}\n";
         $content .= "Layanan: {$booking->service->name}\n";
@@ -48,8 +48,8 @@ class BookingResultController extends Controller
             . '@media print{body{background:#fff;padding:20px;}.receipt-card{border:none;box-shadow:none;}}'
             . '</style></head><body><div class="receipt-card">'
             . '<div class="badge">SLOT DIAMANKAN</div>'
-            . '<h2 style="font-weight:800;font-size:28px;letter-spacing:-.04em;margin:6px 0;text-align:center;">Booking Terconfirm</h2>'
-            . '<p style="font-size:13px;color:#665a50;text-align:center;margin-bottom:20px;">Detail reservasi telah dikirimkan melalui WhatsApp.</p>'
+            . '<h2 style="font-weight:800;font-size:28px;letter-spacing:-.04em;margin:6px 0;text-align:center;">Booking Diterima — Menunggu Konfirmasi Admin</h2>'
+            . '<p style="font-size:13px;color:#665a50;text-align:center;margin-bottom:20px;">Detail reservasi telah dikirimkan ke admin. Konfirmasi akan dilakukan oleh admin melalui WhatsApp.</p>'
             . '<div class="logo">EXCELLENT BARBERSHOP</div>'
             . '<div class="sub">CABANG UTAMA SANUR · SIGNATURE SUITE</div>'
             . '<div class="sub">Jl. Selameti No. 42, Sanur · Senopati</div>'

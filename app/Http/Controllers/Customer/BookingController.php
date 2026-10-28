@@ -144,6 +144,36 @@ class BookingController extends Controller
         return to_route('booking.result', ['booking_code' => $booking->booking_code]);
     }
 
+    public function schedule(Request $request): View
+    {
+        $barber = Barber::query()->where('is_active', true)->findOrFail($request->query('barber_id', 1));
+        $dateObj = $request->query('date') ? Carbon::parse($request->query('date')) : today();
+
+        return view('pages.booking.schedule', [
+            'barber' => $barber,
+            'date' => $dateObj->format('Y-m-d'),
+            'dateObj' => $dateObj,
+        ]);
+    }
+
+    public function confirm(Request $request): View
+    {
+        $barber = Barber::query()->where('is_active', true)->findOrFail($request->query('barber_id', 1));
+        $service = Service::query()->where('is_active', true)->first();
+        $date = $request->query('date', today()->format('Y-m-d'));
+        $scheduleId = $request->query('schedule_id', 5);
+        $timeSlot = [1 => ['start_time' => '15:00', 'end_time' => '15:30'], 2 => ['start_time' => '15:30', 'end_time' => '16:00'], 3 => ['start_time' => '16:00', 'end_time' => '16:30'], 4 => ['start_time' => '16:30', 'end_time' => '17:00'], 5 => ['start_time' => '17:00', 'end_time' => '17:30'], 6 => ['start_time' => '17:30', 'end_time' => '18:00'], 7 => ['start_time' => '19:30', 'end_time' => '20:00'], 8 => ['start_time' => '20:00', 'end_time' => '20:30'], 9 => ['start_time' => '20:30', 'end_time' => '21:00'], 10 => ['start_time' => '21:00', 'end_time' => '21:30']];
+        $timeStr = $timeSlot[$scheduleId]['start_time'] ?? '17:00';
+
+        return view('pages.booking.confirm', [
+            'barber' => $barber,
+            'service' => $service,
+            'date' => $date,
+            'schedule_id' => $scheduleId,
+            'timeStr' => $timeStr,
+        ]);
+    }
+
     public function schedules(Request $request): JsonResponse
     {
         $barberId = $request->query('barber_id');

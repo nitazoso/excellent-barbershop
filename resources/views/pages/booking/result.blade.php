@@ -29,7 +29,10 @@
             </div>
 
             <div class="receipt-detail">
-                <div><strong>Jadwal Sesi</strong> <span>{{ $booking->booking_date->format('l, d M Y') }} · WIB</span>
+                <div><strong>Jadwal Sesi</strong> <span>{{ $booking->booking_date->format('l, d M Y') }}</span>
+                </div>
+                <div><strong>Sesi</strong>
+                    <span>{{ $booking->start_time >= '15:00' && $booking->start_time < '19:30' ? 'Siang' : ($booking->start_time >= '19:30' ? 'Malam' : 'Waktu Istirahat') }}</span>
                 </div>
                 <div><strong>Klien</strong> <span>{{ $booking->customer->name }}</span></div>
                 <div><strong>Master Barber</strong> <span>{{ $booking->barber->name }}</span></div>
@@ -44,11 +47,6 @@
             </div>
         </div>
 
-        <div class="action-bar">
-            <a class="btn-dark"
-                href="{{ route('booking.result.download', ['booking_code' => $booking->booking_code]) }}">⬇ Unduh Struk
-                / Export PDF</a>
-        </div>
         <a class="primary" href="{{ url('/') }}">← Kembali ke Beranda</a>
     </div>
 </section>

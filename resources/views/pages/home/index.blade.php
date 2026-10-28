@@ -1008,7 +1008,7 @@
           <div class="photo" role="img" aria-label="Interior barbershop">
             <div class="arch"></div>
           </div>
-          <a href="#kontak" class="btn btn-navy btn-block cta-wide"
+          <a href="{{ route('booking.index') }}" class="btn btn-navy btn-block cta-wide"
             style="justify-content:space-between">Booking sekarang <span>→</span></a>
         </div>
       </div>

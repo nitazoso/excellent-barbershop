@@ -24,6 +24,12 @@ Route::post('/booking', [BookingController::class, 'store'])
 Route::get('/api/booking/schedules', [BookingController::class, 'schedules'])
     ->name('booking.schedules');
 
+Route::get('/booking/schedule', [BookingController::class, 'schedule'])
+    ->name('booking.schedule');
+
+Route::get('/booking/confirm', [BookingController::class, 'confirm'])
+    ->name('booking.confirm');
+
 // Hasil booking
 Route::get('/booking/result/{booking_code}/download', [BookingResultController::class, 'download'])
     ->name('booking.result.download');
