@@ -18,7 +18,13 @@ Route::get('/booking', [BookingController::class, 'index'])
 Route::post('/booking', [BookingController::class, 'store'])
     ->name('booking.store');
 
+// API jadwal untuk wizard booking
+Route::get('/api/booking/schedules', [BookingController::class, 'schedules'])
+    ->name('booking.schedules');
+
 // Hasil booking
+Route::get('/booking/result/{booking_code}/download', [BookingResultController::class, 'download'])
+    ->name('booking.result.download');
 Route::get('/booking/result/{booking_code}', [BookingResultController::class, 'show'])
     ->name('booking.result');
 

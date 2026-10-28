@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Customer;
 
 use App\Http\Controllers\Controller;
+use App\Models\Barber;
 use App\Models\Booking;
 use App\Models\Customer;
 use App\Models\Schedule;
 use App\Models\Service;
+use Carbon\Carbon;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -19,10 +22,14 @@ class BookingController extends Controller
     public function index(): View
     {
         return view('pages.booking.index', [
+            'barbers' => Barber::query()->where('is_active', true)->orderBy('name')->get(),
             'services' => Service::query()->where('is_active', true)->orderBy('name')->get(),
             'schedules' => Schedule::query()
                 ->with('barber')
                 ->where('is_available', true)
+                ->whereDoesntHave('bookings', function ($q) {
+                    $q->whereIn('status', ['pending', 'confirmed']);
+                })
                 ->whereDate('date', '>=', today())
                 ->whereHas('barber', fn ($query) => $query->where('is_active', true))
                 ->orderBy('date')
@@ -36,17 +43,51 @@ class BookingController extends Controller
         $validated = $request->validate([
             'service_id' => ['required', 'integer', 'exists:services,id'],
             'barber_id' => ['required', 'integer', 'exists:barbers,id'],
-            'schedule_id' => ['required', 'integer', 'exists:schedules,id'],
+            'schedule_id' => ['required', 'integer'],
             'name' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'string', 'max:20'],
             'notes' => ['nullable', 'string', 'max:2000'],
         ]);
 
-        $booking = DB::transaction(function () use ($validated): Booking {
+        $map = [
+            1 => ['start_time' => '15:00', 'end_time' => '15:30'],
+            2 => ['start_time' => '15:30', 'end_time' => '16:00'],
+            3 => ['start_time' => '16:00', 'end_time' => '16:30'],
+            4 => ['start_time' => '16:30', 'end_time' => '17:00'],
+            5 => ['start_time' => '17:00', 'end_time' => '17:30'],
+            6 => ['start_time' => '17:30', 'end_time' => '18:00'],
+            7 => ['start_time' => '19:30', 'end_time' => '20:00'],
+            8 => ['start_time' => '20:00', 'end_time' => '20:30'],
+            9 => ['start_time' => '20:30', 'end_time' => '21:00'],
+            10 => ['start_time' => '21:00', 'end_time' => '21:30'],
+        ];
+
+        if (! array_key_exists($validated['schedule_id'], $map)) {
+            throw ValidationException::withMessages([
+                'schedule_id' => 'Jadwal yang dipilih tidak valid.',
+            ]);
+        }
+
+        $date = $request->input('date') ? Carbon::parse($request->input('date')) : today();
+        $timeSlot = $map[$validated['schedule_id']];
+
+        $booking = DB::transaction(function () use ($validated, $timeSlot, $date): Booking {
             $schedule = Schedule::query()
-                ->whereKey($validated['schedule_id'])
+                ->where('barber_id', $validated['barber_id'])
+                ->whereDate('date', $date)
+                ->where('start_time', $timeSlot['start_time'])
                 ->lockForUpdate()
-                ->firstOrFail();
+                ->first();
+
+            if (! $schedule) {
+                $schedule = Schedule::query()->create([
+                    'barber_id' => $validated['barber_id'],
+                    'date' => $date->format('Y-m-d'),
+                    'start_time' => $timeSlot['start_time'],
+                    'end_time' => $timeSlot['end_time'],
+                    'is_available' => true,
+                ]);
+            }
 
             $service = Service::query()
                 ->whereKey($validated['service_id'])
@@ -101,5 +142,53 @@ class BookingController extends Controller
         });
 
         return to_route('booking.result', ['booking_code' => $booking->booking_code]);
+    }
+
+    public function schedules(Request $request): JsonResponse
+    {
+        $barberId = $request->query('barber_id');
+        $date = $request->query('date');
+
+        $dateObj = $date ? Carbon::parse($date) : today();
+        $now = now();
+
+        $Result = collect();
+        $queryBarberId = $barberId ? (int) $barberId : 1;
+        $slots = [
+            ['id' => 1, 'start_time' => '15:00', 'end_time' => '15:30'],
+            ['id' => 2, 'start_time' => '15:30', 'end_time' => '16:00'],
+            ['id' => 3, 'start_time' => '16:00', 'end_time' => '16:30'],
+            ['id' => 4, 'start_time' => '16:30', 'end_time' => '17:00'],
+            ['id' => 5, 'start_time' => '17:00', 'end_time' => '17:30'],
+            ['id' => 6, 'start_time' => '17:30', 'end_time' => '18:00'],
+            ['id' => 7, 'start_time' => '19:30', 'end_time' => '20:00'],
+            ['id' => 8, 'start_time' => '20:00', 'end_time' => '20:30'],
+            ['id' => 9, 'start_time' => '20:30', 'end_time' => '21:00'],
+            ['id' => 10, 'start_time' => '21:00', 'end_time' => '21:30'],
+        ];
+        foreach ($slots as $slot) {
+            $isBooked = Booking::query()
+                ->where('barber_id', $queryBarberId)
+                ->whereDate('booking_date', $dateObj)
+                ->where('start_time', $slot['start_time'])
+                ->whereIn('status', ['pending', 'confirmed'])
+                ->exists();
+
+            $slotTime = $dateObj->copy()->setTimeFromTimeString($slot['start_time']);
+            $sessionEnd = $slotTime->copy()->addMinutes(30);
+            $isBlocked = $isBooked || $now->gte($slotTime);
+
+            $available = ! $isBlocked;
+
+            $Result->push([
+                'id' => $slot['id'],
+                'start_time' => $slot['start_time'],
+                'end_time' => $slot['end_time'],
+                'is_available' => $available,
+                'barber_id' => $barberId ? (int) $barberId : 1,
+            ]);
+        }
+
+        return response()->json($Result);
     }
 }
