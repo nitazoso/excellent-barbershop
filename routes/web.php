@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\Admin\BarberController as AdminBarberController;
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
+use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Customer\BookingController;
 use App\Http\Controllers\Customer\BookingResultController;
 use App\Http\Controllers\Customer\CheckBookingController;
@@ -38,6 +41,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
 
+    Route::get('/dashboard/stats', [DashboardController::class, 'stats'])
+        ->name('dashboard.stats');
+
     Route::get('/bookings', [AdminBookingController::class, 'index'])
         ->name('bookings');
 
@@ -47,9 +53,25 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/bookings/export-pdf', [AdminBookingController::class, 'exportPdf'])
         ->name('bookings.export-pdf');
 
+    Route::post('/bookings/bulk-confirm', [AdminBookingController::class, 'bulkConfirm'])
+        ->name('bookings.bulk-confirm');
+
     Route::match(['post', 'patch'], '/bookings/{booking}/confirm', [AdminBookingController::class, 'confirm'])
         ->name('bookings.confirm');
 
     Route::match(['post', 'patch'], '/bookings/{booking}/reject', [AdminBookingController::class, 'reject'])
         ->name('bookings.reject');
+
+    Route::match(['post', 'patch'], '/bookings/{booking}/status', [AdminBookingController::class, 'updateStatus'])
+        ->name('bookings.status');
+
+    // Quick Actions
+    Route::post('/barbers', [AdminBarberController::class, 'store'])
+        ->name('barbers.store');
+
+    Route::post('/services', [AdminServiceController::class, 'store'])
+        ->name('services.store');
+
+    Route::post('/settings', [AdminSettingController::class, 'update'])
+        ->name('settings.update');
 });

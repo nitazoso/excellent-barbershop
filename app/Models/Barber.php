@@ -33,4 +33,24 @@ class Barber extends Model
     {
         return $this->hasMany(Booking::class);
     }
+
+    public function getChairNameAttribute(): string
+    {
+        return 'Kursi '.($this->id ?? 1);
+    }
+
+    public function getDisplayNameWithChairAttribute(): string
+    {
+        return "Kursi {$this->id} · {$this->name}";
+    }
+
+    public function getChairCodeLabelAttribute(): string
+    {
+        return sprintf('%02d', $this->id ?? 1);
+    }
+
+    public function getFilterPillLabelAttribute(): string
+    {
+        return "{$this->name} (".sprintf('%02d', $this->id ?? 1).')';
+    }
 }

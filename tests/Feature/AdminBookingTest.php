@@ -15,8 +15,11 @@ class AdminBookingTest extends TestCase
     use RefreshDatabase;
 
     protected Customer $customer;
+
     protected Barber $barber;
+
     protected Service $service;
+
     protected Schedule $schedule;
 
     protected function setUp(): void
@@ -184,4 +187,3 @@ class AdminBookingTest extends TestCase
             ]);
     }
 }
-

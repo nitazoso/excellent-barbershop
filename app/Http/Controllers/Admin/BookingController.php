@@ -72,6 +72,84 @@ class BookingController extends Controller
     }
 
     /**
+     * Konfirmasi semua antrean booking berstatus pending sekaligus (bulk confirmation).
+     */
+    public function bulkConfirm(Request $request): RedirectResponse|JsonResponse
+    {
+        $query = Booking::query()->where('status', Booking::STATUS_PENDING);
+
+        if ($request->filled('booking_ids') && is_array($request->input('booking_ids'))) {
+            $query->whereIn('id', $request->input('booking_ids'));
+        }
+
+        $count = 0;
+        DB::transaction(function () use ($query, &$count): void {
+            $pendingBookings = $query->with('schedule')->lockForUpdate()->get();
+            $count = $pendingBookings->count();
+
+            foreach ($pendingBookings as $booking) {
+                $booking->update([
+                    'status' => Booking::STATUS_CONFIRMED,
+                    'rejection_reason' => null,
+                ]);
+
+                $booking->schedule?->update(['is_available' => false]);
+            }
+        });
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => "{$count} antrean booking berhasil dikonfirmasi sekaligus.",
+                'confirmed_count' => $count,
+            ]);
+        }
+
+        return back()->with('success', "{$count} antrean booking berhasil dikonfirmasi sekaligus.");
+    }
+
+    /**
+     * Pengelolaan status jadwal booking harian (misal: Selesai, Sedang Cukur, Mendatang, Dibatalkan).
+     */
+    public function updateStatus(Request $request, Booking $booking): RedirectResponse|JsonResponse
+    {
+        $validated = $request->validate([
+            'status' => ['required', 'string', 'in:pending,confirmed,in_progress,completed,rejected,break'],
+            'rejection_reason' => ['nullable', 'string', 'max:1000'],
+        ]);
+
+        $newStatus = $validated['status'];
+
+        DB::transaction(function () use ($booking, $newStatus, $validated): void {
+            $updateData = ['status' => $newStatus];
+
+            if ($newStatus === Booking::STATUS_REJECTED) {
+                $updateData['rejection_reason'] = $validated['rejection_reason'] ?? 'Dibatalkan oleh admin';
+                $booking->schedule?->update(['is_available' => true]);
+            } else {
+                $updateData['rejection_reason'] = null;
+                if (in_array($newStatus, [Booking::STATUS_CONFIRMED, Booking::STATUS_IN_PROGRESS, Booking::STATUS_COMPLETED])) {
+                    $booking->schedule?->update(['is_available' => false]);
+                }
+            }
+
+            $booking->update($updateData);
+        });
+
+        $booking->load(['customer', 'barber', 'service', 'schedule']);
+
+        if ($request->expectsJson()) {
+            return response()->json([
+                'success' => true,
+                'message' => "Status booking #{$booking->booking_code} berhasil diperbarui menjadi {$booking->status_label}.",
+                'data' => $booking,
+            ]);
+        }
+
+        return back()->with('success', "Status booking #{$booking->booking_code} berhasil diperbarui.");
+    }
+
+    /**
      * Tolak booking (mengubah status ke rejected dan simpan alasan penolakan).
      */
     public function reject(RejectBookingRequest $request, Booking $booking): RedirectResponse|JsonResponse
