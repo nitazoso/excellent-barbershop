@@ -23,5 +23,6 @@ class DatabaseSeeder extends Seeder
         );
 
         $this->call(DashboardSeeder::class);
+        $this->call(PendingBookingSeeder::class);
     }
 }

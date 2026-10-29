@@ -47,6 +47,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::get('/bookings', [AdminBookingController::class, 'index'])
         ->name('bookings');
 
+    Route::post('/bookings/manual', [AdminBookingController::class, 'storeManual'])
+        ->name('bookings.manual.store');
+
     Route::get('/bookings/report', [AdminBookingController::class, 'report'])
         ->name('bookings.report');
 

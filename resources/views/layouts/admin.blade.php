@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Excellent Atelier — Admin Dashboard')</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -250,6 +250,23 @@
         .sidebar-drawer-backdrop.active {
             display: block;
         }
+
+        .booking-screen-frame { width:100%; max-width:480px; }
+        .booking-screen-frame .figma-topbar { height:60px; padding:0 16px; }
+        .booking-screen-frame .figma-app-content { padding:20px 16px 32px; }
+
+        @media (min-width: 540px) {
+            .booking-screen-frame { max-width:none; }
+        }
+
+        @media (min-width: 768px) {
+            .booking-screen-frame .figma-topbar { height:68px; padding:0 32px; }
+            .booking-screen-frame .figma-app-content { padding:30px 32px 48px; }
+        }
+
+        @media (min-width: 1200px) {
+            .booking-screen-frame .figma-app-content { padding-right:48px; padding-left:48px; }
+        }
     </style>
     @stack('styles')
 </head>
@@ -312,7 +329,7 @@
     </aside>
 
     {{-- Figma Centered Screen Frame --}}
-    <div class="figma-screen-frame">
+    <div class="figma-screen-frame {{ request()->routeIs('admin.bookings*') ? 'booking-screen-frame' : '' }}">
         {{-- Exact Figma Topbar --}}
         <header class="figma-topbar">
             <button type="button" class="btn-hamburger" onclick="toggleSidebarDrawer()" aria-label="Menu">

@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\CreateManualBookingRequest;
 use App\Http\Requests\Admin\FilterBookingRequest;
 use App\Http\Requests\Admin\RejectBookingRequest;
 use App\Models\Barber;
 use App\Models\Booking;
+use App\Models\Customer;
+use App\Models\Schedule;
+use App\Models\Service;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
@@ -15,6 +19,8 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class BookingController extends Controller
 {
@@ -25,10 +31,12 @@ class BookingController extends Controller
     {
         $filters = $request->validated();
         $query = $this->buildFilteredQuery($filters);
+        $summaryFilters = $filters;
+        unset($summaryFilters['status']);
 
         if ($request->expectsJson()) {
             $bookings = $query->paginate(20);
-            $summary = $this->calculateSummary($this->buildFilteredQuery($filters));
+            $summary = $this->calculateSummary($this->buildFilteredQuery($summaryFilters));
 
             return response()->json([
                 'success' => true,
@@ -39,10 +47,81 @@ class BookingController extends Controller
         }
 
         $bookings = $query->paginate(20)->withQueryString();
-        $barbers = Barber::query()->orderBy('name')->get();
-        $summary = $this->calculateSummary($this->buildFilteredQuery($filters));
+        $barbers = Barber::query()->where('is_active', true)->orderBy('name')->get();
+        $summary = $this->calculateSummary($this->buildFilteredQuery($summaryFilters));
 
         return view('pages.admin.bookings', compact('bookings', 'barbers', 'filters', 'summary'));
+    }
+
+    /**
+     * Simpan booking yang dibuat langsung oleh admin.
+     */
+    public function storeManual(CreateManualBookingRequest $request): RedirectResponse
+    {
+        $validated = $request->validated();
+
+        $booking = DB::transaction(function () use ($validated): Booking {
+            $schedule = Schedule::query()
+                ->whereKey($validated['schedule_id'])
+                ->lockForUpdate()
+                ->firstOrFail();
+            $barber = Barber::query()->findOrFail($validated['barber_id']);
+            $service = Service::query()->findOrFail($validated['service_id']);
+            $scheduleHasActiveBooking = Booking::query()
+                ->where('schedule_id', $schedule->id)
+                ->whereIn('status', [Booking::STATUS_PENDING, Booking::STATUS_CONFIRMED, Booking::STATUS_IN_PROGRESS])
+                ->exists();
+            $scheduleHasPassed = $schedule->date->lt(today())
+                || ($schedule->date->isToday() && $schedule->start_time <= now()->format('H:i:s'));
+
+            if (! $barber->is_active) {
+                throw ValidationException::withMessages([
+                    'barber_id' => 'Barber yang dipilih sedang tidak aktif.',
+                ]);
+            }
+
+            if (! $service->is_active) {
+                throw ValidationException::withMessages([
+                    'service_id' => 'Layanan yang dipilih sedang tidak aktif.',
+                ]);
+            }
+
+            if (
+                ! $schedule->is_available
+                || (int) $schedule->barber_id !== (int) $barber->id
+                || $scheduleHasPassed
+                || $scheduleHasActiveBooking
+            ) {
+                throw ValidationException::withMessages([
+                    'schedule_id' => 'Jadwal sudah tidak tersedia. Silakan pilih jadwal lain.',
+                ]);
+            }
+
+            $customer = Customer::query()->updateOrCreate(
+                ['phone' => $validated['customer_phone']],
+                [
+                    'name' => $validated['customer_name'],
+                    'membership_type' => $validated['membership_type'],
+                ],
+            );
+
+            $schedule->update(['is_available' => false]);
+
+            return Booking::query()->create([
+                'booking_code' => $this->generateBookingCode(),
+                'customer_id' => $customer->id,
+                'barber_id' => $barber->id,
+                'service_id' => $service->id,
+                'schedule_id' => $schedule->id,
+                'booking_date' => $schedule->date,
+                'start_time' => $schedule->start_time,
+                'end_time' => $schedule->end_time,
+                'status' => Booking::STATUS_PENDING,
+                'notes' => $validated['notes'] ?? null,
+            ]);
+        });
+
+        return to_route('admin.bookings')->with('success', "Booking {$booking->booking_code} berhasil ditambahkan.");
     }
 
     /**
@@ -115,7 +194,7 @@ class BookingController extends Controller
     {
         $validated = $request->validate([
             'status' => ['required', 'string', 'in:pending,confirmed,in_progress,completed,rejected,break'],
-            'rejection_reason' => ['nullable', 'string', 'max:1000'],
+            'rejection_reason' => ['required_if:status,rejected', 'nullable', 'string', 'max:1000'],
         ]);
 
         $newStatus = $validated['status'];
@@ -124,7 +203,7 @@ class BookingController extends Controller
             $updateData = ['status' => $newStatus];
 
             if ($newStatus === Booking::STATUS_REJECTED) {
-                $updateData['rejection_reason'] = $validated['rejection_reason'] ?? 'Dibatalkan oleh admin';
+                $updateData['rejection_reason'] = $validated['rejection_reason'];
                 $booking->schedule?->update(['is_available' => true]);
             } else {
                 $updateData['rejection_reason'] = null;
@@ -181,8 +260,10 @@ class BookingController extends Controller
     public function report(FilterBookingRequest $request): JsonResponse|View
     {
         $filters = $request->validated();
+        $summaryFilters = $filters;
+        unset($summaryFilters['status']);
         $bookings = $this->buildFilteredQuery($filters)->get();
-        $summary = $this->calculateSummary($this->buildFilteredQuery($filters));
+        $summary = $this->calculateSummary($this->buildFilteredQuery($summaryFilters));
 
         if ($request->expectsJson() || $request->ajax() || $request->query('format') === 'json') {
             return response()->json([
@@ -193,7 +274,7 @@ class BookingController extends Controller
             ]);
         }
 
-        $barbers = Barber::query()->orderBy('name')->get();
+        $barbers = Barber::query()->where('is_active', true)->orderBy('name')->get();
 
         return view('pages.admin.bookings', [
             'bookings' => $this->buildFilteredQuery($filters)->paginate(20)->withQueryString(),
@@ -239,6 +320,16 @@ class BookingController extends Controller
     {
         return Booking::query()
             ->with(['customer', 'barber', 'service', 'schedule'])
+            ->when(! empty($filters['search']), function (Builder $query) use ($filters): void {
+                $search = ltrim(trim((string) $filters['search']), '#');
+                $query->where(function (Builder $query) use ($search): void {
+                    $query->where('booking_code', 'like', "%{$search}%")
+                        ->orWhereHas('customer', function (Builder $customerQuery) use ($search): void {
+                            $customerQuery->where('name', 'like', "%{$search}%")
+                                ->orWhere('phone', 'like', "%{$search}%");
+                        });
+                });
+            })
             ->when(! empty($filters['start_date']), function (Builder $query) use ($filters): void {
                 $query->whereDate('booking_date', '>=', $filters['start_date']);
             })
@@ -259,7 +350,7 @@ class BookingController extends Controller
      * Menghitung ringkasan statistik rekap data booking.
      *
      * @param  Builder<Booking>  $query
-     * @return array{total: int, pending: int, confirmed: int, rejected: int, revenue: float}
+     * @return array{total: int, pending: int, confirmed: int, in_progress: int, rejected: int, revenue: float}
      */
     protected function calculateSummary(Builder $query): array
     {
@@ -269,10 +360,20 @@ class BookingController extends Controller
             'total' => $bookings->count(),
             'pending' => $bookings->where('status', Booking::STATUS_PENDING)->count(),
             'confirmed' => $bookings->where('status', Booking::STATUS_CONFIRMED)->count(),
+            'in_progress' => $bookings->where('status', Booking::STATUS_IN_PROGRESS)->count(),
             'rejected' => $bookings->where('status', Booking::STATUS_REJECTED)->count(),
             'revenue' => (float) $bookings->where('status', Booking::STATUS_CONFIRMED)->sum(function (Booking $booking): float {
                 return (float) ($booking->service?->price ?? 0);
             }),
         ];
+    }
+
+    private function generateBookingCode(): string
+    {
+        do {
+            $bookingCode = 'EXC-'.Str::upper(Str::random(6));
+        } while (Booking::query()->where('booking_code', $bookingCode)->exists());
+
+        return $bookingCode;
     }
 }
