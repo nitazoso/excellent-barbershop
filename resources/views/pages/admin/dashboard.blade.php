@@ -2,35 +2,140 @@
 
 @section('title', 'Dashboard Admin — Excellent Barbershop')
 
+@push('styles')
+    <link rel="stylesheet" href="/css/admin-dashboard.css">
+@endpush
+
 @section('content')
-    <div class="admin-page-heading">
+    @if (session('success'))
+        <div class="dashboard-flash dashboard-flash-success" role="status">{{ session('success') }}</div>
+    @endif
+
+    @if (session('error'))
+        <div class="dashboard-flash dashboard-flash-error" role="alert">{{ session('error') }}</div>
+    @endif
+
+    <div class="dashboard-heading">
         <div>
-            <span>PANEL PENGELOLA</span>
+            <span class="dashboard-eyebrow">PANEL PENGELOLA</span>
             <h1>Dashboard Admin</h1>
-            <p>Selamat datang, <strong>{{ auth()->user()->name }}</strong> ({{ auth()->user()->email }}).</p>
+            <p>{{ $todayDateLabel }}</p>
         </div>
-        <div style="display: flex; gap: 12px; align-items: center;">
-            <a href="{{ route('admin.bookings') }}">LIHAT BOOKING →</a>
-            <form action="{{ route('admin.logout') }}" method="POST" style="margin: 0;">
-                @csrf
-                <button type="submit" style="background: #ffffff; border: 1px solid #ded8cf; border-radius: 4px; padding: 6px 14px; cursor: pointer; font-size: 11px; font-weight: 700; color: #a93822; letter-spacing: 0.05em;">LOGOUT</button>
-            </form>
-        </div>
+        <a class="dashboard-all-link" href="{{ route('admin.bookings') }}">Semua booking <span aria-hidden="true">→</span></a>
     </div>
 
-    <section class="admin-panel">
-        <div style="display: flex; align-items: center; gap: 16px; margin-bottom: 20px;">
-            @if (auth()->user()->avatar)
-                <img src="{{ auth()->user()->avatar }}" alt="{{ auth()->user()->name }}" style="width: 56px; height: 56px; border-radius: 50%; object-fit: cover; border: 2px solid #e7e2da;">
-            @endif
+    <section class="dashboard-stats" aria-label="Ringkasan booking">
+        <article class="dashboard-stat-card dashboard-stat-total">
+            <div><span>Total booking</span><span class="dashboard-stat-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8m-8 4h8m-8 4h5"/></svg></span></div>
+            <strong>{{ $totalBookingsCount }}</strong>
+            <small>Semua reservasi</small>
+        </article>
+        <article class="dashboard-stat-card dashboard-stat-pending">
+            <div><span>Menunggu</span><span class="dashboard-stat-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span></div>
+            <strong>{{ $pendingBookingsCount }}</strong>
+            <small>Perlu dikonfirmasi</small>
+        </article>
+        <article class="dashboard-stat-card dashboard-stat-today">
+            <div><span>Hari ini</span><span class="dashboard-stat-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg></span></div>
+            <strong>{{ $todayBookingsCount }}</strong>
+            <small>Jadwal booking</small>
+        </article>
+        <article class="dashboard-stat-card dashboard-stat-confirmed">
+            <div><span>Terkonfirmasi</span><span class="dashboard-stat-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="m8 12 2.5 2.5L16 9"/></svg></span></div>
+            <strong>{{ $confirmedTodayBookingsCount }}</strong>
+            <small>Booking hari ini</small>
+        </article>
+    </section>
+
+    <nav class="dashboard-quick-links" aria-label="Akses cepat">
+        <a href="{{ route('admin.bookings') }}"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/></svg> Booking</a>
+        <a href="{{ route('admin.admins.index') }}"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="4"/><path d="M2 21v-2a7 7 0 0 1 14 0v2M18 8h5m-2.5-2.5v5"/></svg> Kelola Admin</a>
+    </nav>
+
+    <section class="dashboard-section">
+        <div class="dashboard-section-heading">
             <div>
-                <h2 style="margin: 0; font-size: 20px;">Selamat datang di Dashboard Admin.</h2>
-                <p style="margin: 4px 0 0; color: #6d655d;">Anda berhasil terautentikasi melalui Google OAuth sebagai Administrator Excellent Barbershop.</p>
+                <span class="dashboard-eyebrow">PERLU TINDAKAN</span>
+                <h2>Antrean Perlu Dikonfirmasi</h2>
             </div>
+            <a href="{{ route('admin.bookings') }}">Lihat semua <span aria-hidden="true">→</span></a>
         </div>
 
-        <div style="margin-top: 24px; padding-top: 16px; border-top: 1px solid #f0eae1; color: #8d8379; font-size: 13px;">
-            <p>Halaman ini merupakan placeholder dashboard admin. Modul operasional dan manajemen booking dapat diakses melalui menu navigasi.</p>
+        <div class="dashboard-booking-list">
+            @forelse ($pendingBookings as $booking)
+                <article class="dashboard-booking-card">
+                    <div class="dashboard-booking-card-heading">
+                        <div>
+                            <span class="dashboard-booking-code">{{ $booking->booking_code }}</span>
+                            <h3>{{ $booking->customer->name }}</h3>
+                        </div>
+                        <span class="dashboard-booking-age"><span aria-hidden="true"></span>{{ $booking->created_at->locale('id')->diffForHumans() }}</span>
+                    </div>
+                    <p class="dashboard-booking-meta">{{ $booking->customer->phone }} · {{ $booking->service->name }}</p>
+                    <div class="dashboard-booking-schedule">
+                        <span>Waktu &amp; Kursi</span>
+                        <strong>{{ substr($booking->start_time, 0, 5) }} · {{ $booking->barber->name }}</strong>
+                        <small>{{ $booking->booking_date->translatedFormat('d M Y') }}</small>
+                    </div>
+                    <div class="dashboard-booking-actions">
+                        <form action="{{ route('admin.bookings.update-status', $booking) }}" method="POST">
+                            @csrf
+                            @method('PATCH')
+                            <input type="hidden" name="status" value="cancelled">
+                            <button class="dashboard-reject-button" type="submit">TOLAK</button>
+                        </form>
+                        <form action="{{ route('admin.bookings.update-status', $booking) }}" method="POST">
+                            @csrf
+                            @method('PATCH')
+                            <input type="hidden" name="status" value="confirmed">
+                            <button class="dashboard-confirm-button" type="submit"><span aria-hidden="true">✓</span> KONFIRMASI</button>
+                        </form>
+                    </div>
+                </article>
+            @empty
+                <div class="dashboard-empty-state">
+                    <span class="dashboard-empty-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></svg></span>
+                    <strong>Semua booking sudah ditangani</strong>
+                    <p>Booking baru yang menunggu konfirmasi akan muncul di sini.</p>
+                </div>
+            @endforelse
+        </div>
+
+        @if ($pendingBookingsCount > 0)
+            <form class="dashboard-confirm-all-form" action="{{ route('admin.bookings.confirm-pending') }}" method="POST">
+                @csrf
+                <button class="dashboard-confirm-all-button" type="submit">
+                    <span aria-hidden="true">✓</span> KONFIRMASI SEMUA ({{ $pendingBookingsCount }} BOOKING)
+                </button>
+            </form>
+        @endif
+    </section>
+
+    <section class="dashboard-section dashboard-today-section">
+        <div class="dashboard-section-heading">
+            <div>
+                <span class="dashboard-eyebrow">JADWAL OPERASIONAL</span>
+                <h2>Jadwal Booking Hari Ini</h2>
+            </div>
+            <span class="dashboard-today-count">{{ $todayBookingsCount }} booking</span>
+        </div>
+
+        <div class="dashboard-today-list">
+            @forelse ($todayBookings as $booking)
+                <article class="dashboard-today-item">
+                    <time>{{ substr($booking->start_time, 0, 5) }}</time>
+                    <div class="dashboard-today-details">
+                        <strong>{{ $booking->customer->name }}</strong>
+                        <span>{{ $booking->service->name }} · {{ $booking->barber->name }}</span>
+                    </div>
+                    <span class="dashboard-status dashboard-status-{{ $booking->status }}">{{ ucfirst($booking->status) }}</span>
+                </article>
+            @empty
+                <div class="dashboard-empty-state dashboard-empty-today">
+                    <strong>Belum ada booking hari ini</strong>
+                    <p>Jadwal reservasi hari ini akan tampil di sini.</p>
+                </div>
+            @endforelse
         </div>
     </section>
 @endsection
