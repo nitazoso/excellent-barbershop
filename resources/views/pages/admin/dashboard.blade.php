@@ -78,13 +78,13 @@
                         <small>{{ $booking->booking_date->translatedFormat('d M Y') }}</small>
                     </div>
                     <div class="dashboard-booking-actions">
-                        <form action="{{ route('admin.bookings.update-status', $booking) }}" method="POST">
+                        <form action="{{ route('admin.bookings.reject', $booking) }}" method="POST">
                             @csrf
                             @method('PATCH')
-                            <input type="hidden" name="status" value="cancelled">
-                            <button class="dashboard-reject-button" type="submit">TOLAK</button>
+                            <input type="hidden" name="rejection_reason" value="">
+                            <button class="dashboard-reject-button" type="button" onclick="rejectDashboardBooking(this)">TOLAK</button>
                         </form>
-                        <form action="{{ route('admin.bookings.update-status', $booking) }}" method="POST">
+                        <form action="{{ route('admin.bookings.confirm', $booking) }}" method="POST">
                             @csrf
                             @method('PATCH')
                             <input type="hidden" name="status" value="confirmed">
@@ -139,3 +139,18 @@
         </div>
     </section>
 @endsection
+
+@push('scripts')
+    <script>
+        function rejectDashboardBooking(button) {
+            const rejectionReason = window.prompt('Masukkan alasan penolakan booking:');
+
+            if (!rejectionReason?.trim()) {
+                return;
+            }
+
+            button.form.elements.rejection_reason.value = rejectionReason.trim();
+            button.form.requestSubmit();
+        }
+    </script>
+@endpush

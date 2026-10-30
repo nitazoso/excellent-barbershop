@@ -10,6 +10,12 @@ class Booking extends Model
 {
     use HasFactory;
 
+    public const STATUS_PENDING = 'pending';
+
+    public const STATUS_CONFIRMED = 'confirmed';
+
+    public const STATUS_REJECTED = 'rejected';
+
     protected $fillable = [
         'booking_code',
         'customer_id',
@@ -21,6 +27,7 @@ class Booking extends Model
         'end_time',
         'status',
         'notes',
+        'rejection_reason',
     ];
 
     protected function casts(): array
@@ -48,5 +55,20 @@ class Booking extends Model
     public function schedule(): BelongsTo
     {
         return $this->belongsTo(Schedule::class);
+    }
+
+    public function isPending(): bool
+    {
+        return $this->status === self::STATUS_PENDING;
+    }
+
+    public function isConfirmed(): bool
+    {
+        return $this->status === self::STATUS_CONFIRMED;
+    }
+
+    public function isRejected(): bool
+    {
+        return $this->status === self::STATUS_REJECTED;
     }
 }

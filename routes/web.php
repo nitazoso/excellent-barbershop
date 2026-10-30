@@ -48,7 +48,10 @@ Route::prefix($adminPath)->name('admin.')->group(function () use ($adminPath): v
     Route::middleware(['auth', 'admin'])->group(function (): void {
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::get('/bookings', [AdminBookingController::class, 'index'])->name('bookings');
-        Route::patch('/bookings/{booking}/status', [AdminBookingController::class, 'updateStatus'])->name('bookings.update-status');
+        Route::get('/bookings/report', [AdminBookingController::class, 'report'])->name('bookings.report');
+        Route::get('/bookings/export-pdf', [AdminBookingController::class, 'exportPdf'])->name('bookings.export-pdf');
+        Route::match(['post', 'patch'], '/bookings/{booking}/confirm', [AdminBookingController::class, 'confirm'])->name('bookings.confirm');
+        Route::match(['post', 'patch'], '/bookings/{booking}/reject', [AdminBookingController::class, 'reject'])->name('bookings.reject');
         Route::post('/bookings/confirm-pending', [AdminBookingController::class, 'confirmPending'])->name('bookings.confirm-pending');
 
         Route::get('/admins', [AdminManagementController::class, 'index'])->name('admins.index');
