@@ -3,6 +3,9 @@
 @section('title', 'Dashboard Admin — Excellent Barbershop')
 
 @push('styles')
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/admin-dashboard.css">
 @endpush
 
@@ -143,6 +146,35 @@
 
 @push('scripts')
     <script>
+        const dashboardMotionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+        document.documentElement.classList.add('dashboard-enhanced');
+
+        document.querySelectorAll('.dashboard-stat-card > strong').forEach((counter) => {
+            const target = Number.parseInt(counter.textContent.trim(), 10);
+
+            if (!Number.isFinite(target) || dashboardMotionPreference.matches) {
+                return;
+            }
+
+            const duration = 850;
+            const startedAt = performance.now();
+
+            const animateCounter = (now) => {
+                const progress = Math.min((now - startedAt) / duration, 1);
+                const easedProgress = 1 - Math.pow(1 - progress, 3);
+
+                counter.textContent = String(Math.round(target * easedProgress));
+
+                if (progress < 1) {
+                    requestAnimationFrame(animateCounter);
+                }
+            };
+
+            counter.textContent = '0';
+            requestAnimationFrame(animateCounter);
+        });
+
         document.querySelectorAll('.dashboard-today-filters [data-barber-filter]').forEach((filterButton) => {
             filterButton.addEventListener('click', () => {
                 const selectedBarberId = filterButton.dataset.barberFilter;
@@ -152,21 +184,95 @@
                 });
 
                 document.querySelectorAll('.dashboard-today-item[data-barber-id]').forEach((bookingItem) => {
-                    bookingItem.hidden = selectedBarberId !== 'all'
-                        && bookingItem.dataset.barberId !== selectedBarberId;
+                    const shouldShow = selectedBarberId === 'all'
+                        || bookingItem.dataset.barberId === selectedBarberId;
+
+                    bookingItem.classList.toggle('is-filtered-out', !shouldShow);
+                    bookingItem.setAttribute('aria-hidden', String(!shouldShow));
                 });
             });
         });
 
-        function rejectDashboardBooking(button) {
-            const rejectionReason = window.prompt('Masukkan alasan penolakan booking:');
+        document.querySelectorAll('.dashboard-booking-actions form, .dashboard-confirm-all-form').forEach((form) => {
+            form.addEventListener('submit', () => {
+                const actionButton = form.querySelector('button');
 
-            if (!rejectionReason?.trim()) {
-                return;
+                if (!actionButton) {
+                    return;
+                }
+
+                actionButton.classList.add('is-loading');
+                actionButton.disabled = true;
+                actionButton.setAttribute('aria-busy', 'true');
+                actionButton.dataset.originalLabel = actionButton.textContent.trim();
+                actionButton.textContent = 'Memproses…';
+
+                const bookingCard = form.closest('.dashboard-booking-card');
+
+                if (bookingCard) {
+                    bookingCard.classList.add('is-submitting');
+                }
+            });
+        });
+
+        function getDashboardRejectDialog() {
+            let dialog = document.querySelector('#dashboard-reject-dialog');
+
+            if (dialog) {
+                return dialog;
             }
 
-            button.form.elements.rejection_reason.value = rejectionReason.trim();
-            button.form.requestSubmit();
+            dialog = document.createElement('dialog');
+            dialog.id = 'dashboard-reject-dialog';
+            dialog.className = 'dashboard-reject-dialog';
+            dialog.setAttribute('aria-labelledby', 'dashboard-reject-title');
+            dialog.innerHTML = `
+                <form class="dashboard-reject-dialog-panel" method="dialog">
+                    <span class="dashboard-reject-dialog-icon" aria-hidden="true">!</span>
+                    <h2 id="dashboard-reject-title">Tolak booking ini?</h2>
+                    <p>Berikan alasan penolakan agar pelanggan memahami keputusan Anda.</p>
+                    <label for="dashboard-rejection-reason">Alasan penolakan</label>
+                    <textarea id="dashboard-rejection-reason" rows="3" maxlength="500" required placeholder="Tulis alasan singkat…"></textarea>
+                    <div class="dashboard-reject-dialog-actions">
+                        <button class="dashboard-dialog-cancel" type="button" data-dialog-cancel>Batal</button>
+                        <button class="dashboard-dialog-confirm" type="submit">Tolak booking</button>
+                    </div>
+                </form>`;
+            document.body.append(dialog);
+
+            const reasonField = dialog.querySelector('textarea');
+            const cancelButton = dialog.querySelector('[data-dialog-cancel]');
+
+            cancelButton.addEventListener('click', () => dialog.close());
+            dialog.addEventListener('click', (event) => {
+                if (event.target === dialog) {
+                    dialog.close();
+                }
+            });
+            dialog.querySelector('form').addEventListener('submit', (event) => {
+                event.preventDefault();
+
+                if (!reasonField.value.trim()) {
+                    reasonField.focus();
+                    return;
+                }
+
+                dialog.rejectionForm.elements.rejection_reason.value = reasonField.value.trim();
+                dialog.rejectionForm.requestSubmit();
+                dialog.close();
+            });
+
+            return dialog;
+        }
+
+        function rejectDashboardBooking(button) {
+            const form = button.form;
+            const dialog = getDashboardRejectDialog();
+            const reasonField = dialog.querySelector('textarea');
+            dialog.rejectionForm = form;
+            reasonField.value = '';
+            dialog.showModal();
+            window.setTimeout(() => reasonField.focus(), 50);
         }
     </script>
 @endpush

@@ -398,6 +398,177 @@
     }
 }
 
+/* Dashboard polish and restrained motion */
+.admin-main-dashboard {
+    --dashboard-ink: #182438;
+    --dashboard-muted: #788498;
+    --dashboard-line: #e7ebf0;
+    --dashboard-gold: #c99b3f;
+    font-family: Inter, Arial, sans-serif;
+}
+
+.dashboard-stat-card,
+.dashboard-booking-card,
+.dashboard-today-list {
+    border-color: var(--dashboard-line);
+    box-shadow: 0 5px 18px #17243a0a;
+}
+
+.dashboard-enhanced .dashboard-stat-card,
+.dashboard-enhanced .dashboard-quick-links,
+.dashboard-enhanced .dashboard-section,
+.dashboard-enhanced .dashboard-flash {
+    animation: dashboard-enter .52s cubic-bezier(.2, .7, .25, 1) both;
+}
+
+.dashboard-enhanced .dashboard-stat-card:nth-child(2) { animation-delay: 55ms; }
+.dashboard-enhanced .dashboard-stat-card:nth-child(3) { animation-delay: 100ms; }
+.dashboard-enhanced .dashboard-stat-card:nth-child(4) { animation-delay: 145ms; }
+.dashboard-enhanced .dashboard-section:nth-of-type(2) { animation-delay: 100ms; }
+.dashboard-enhanced .dashboard-section:nth-of-type(3) { animation-delay: 160ms; }
+
+.dashboard-stat-card,
+.dashboard-booking-card,
+.dashboard-quick-links a,
+.dashboard-today-filters button,
+.dashboard-today-item,
+.dashboard-booking-actions button,
+.dashboard-confirm-all-button {
+    transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease, background-color .2s ease, color .2s ease, opacity .2s ease;
+}
+
+.dashboard-stat-card:hover {
+    transform: translateY(-3px);
+    border-color: #d5dce5;
+    box-shadow: 0 12px 25px #17243a12;
+}
+
+.dashboard-quick-links a:hover,
+.dashboard-today-filters button:hover {
+    transform: translateY(-1px);
+    border-color: #c99b3f80;
+}
+
+.dashboard-booking-card:hover {
+    border-color: #dfc27e;
+    box-shadow: 0 10px 24px #17243a10;
+}
+
+.dashboard-booking-actions button:active,
+.dashboard-confirm-all-button:active,
+.dashboard-quick-links a:active,
+.dashboard-today-filters button:active {
+    transform: scale(.98);
+}
+
+.dashboard-booking-actions button:focus-visible,
+.dashboard-confirm-all-button:focus-visible,
+.dashboard-quick-links a:focus-visible,
+.dashboard-today-filters button:focus-visible {
+    outline: 3px solid #c99b3f66;
+    outline-offset: 2px;
+}
+
+.dashboard-booking-schedule {
+    min-height: 40px;
+    border-color: #edf0f4;
+    border-radius: 9px;
+    background: #f8f9fb;
+    font-size: 10px;
+}
+
+.dashboard-booking-schedule strong { font-size: 10px; }
+.dashboard-booking-schedule small { display: inline; margin-left: 5px; color: #8994a3; }
+
+.dashboard-reject-button:hover { border-color: #f0aeb4; background: #fff5f5; }
+.dashboard-confirm-button:hover { box-shadow: 0 5px 12px #14233b24; }
+.dashboard-today-filters button { transition: all .18s ease; }
+.dashboard-today-filters button.is-active { box-shadow: 0 3px 8px #14233b22; }
+
+.dashboard-today-item.is-filtered-out {
+    max-height: 0;
+    min-height: 0;
+    margin: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-width: 0;
+    opacity: 0;
+    overflow: hidden;
+    transform: translateY(-5px);
+    pointer-events: none;
+}
+
+.dashboard-today-item:not(.is-filtered-out) {
+    max-height: 90px;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.dashboard-status { transition: background-color .2s ease, color .2s ease, transform .2s ease; }
+.dashboard-booking-card.is-submitting { opacity: .64; transform: scale(.995); pointer-events: none; }
+.dashboard-booking-actions button.is-loading,
+.dashboard-confirm-all-button.is-loading { opacity: .78; cursor: wait; }
+.dashboard-booking-actions button:disabled,
+.dashboard-confirm-all-button:disabled { cursor: wait; }
+.dashboard-booking-actions button.is-loading::before,
+.dashboard-confirm-all-button.is-loading::before {
+    display: inline-block;
+    width: 11px;
+    height: 11px;
+    margin-right: 7px;
+    border: 2px solid currentColor;
+    border-right-color: transparent;
+    border-radius: 50%;
+    content: "";
+    vertical-align: -2px;
+    animation: dashboard-spin .7s linear infinite;
+}
+
+.dashboard-reject-dialog {
+    width: min(430px, calc(100% - 32px));
+    max-width: none;
+    padding: 0;
+    overflow: visible;
+    border: 0;
+    border-radius: 18px;
+    background: transparent;
+    color: var(--dashboard-ink);
+    font-family: Inter, Arial, sans-serif;
+    opacity: 0;
+    transform: translateY(12px) scale(.98);
+    transition: opacity .2s ease, transform .2s ease, overlay .2s allow-discrete, display .2s allow-discrete;
+}
+
+.dashboard-reject-dialog[open] { opacity: 1; transform: translateY(0) scale(1); }
+.dashboard-reject-dialog::backdrop { background: #10182780; backdrop-filter: blur(3px); }
+.dashboard-reject-dialog-panel { padding: 28px; border: 1px solid #ffffffaa; border-radius: 18px; background: #fff; box-shadow: 0 24px 70px #10182738; }
+.dashboard-reject-dialog-icon { display: grid; width: 42px; height: 42px; place-items: center; border-radius: 13px; background: #fff0ef; color: #c9544c; font-size: 21px; font-weight: 800; }
+.dashboard-reject-dialog h2 { margin: 18px 0 7px; font-size: 20px; letter-spacing: -.03em; }
+.dashboard-reject-dialog p { margin: 0 0 20px; color: var(--dashboard-muted); font-size: 13px; line-height: 1.6; }
+.dashboard-reject-dialog label { display: block; margin-bottom: 7px; font-size: 12px; font-weight: 700; }
+.dashboard-reject-dialog textarea { display: block; width: 100%; min-height: 90px; resize: vertical; padding: 11px 12px; border: 1px solid #dfe4eb; border-radius: 10px; color: var(--dashboard-ink); font: inherit; font-size: 13px; }
+.dashboard-reject-dialog textarea:focus { border-color: #c99b3f; outline: 3px solid #c99b3f26; }
+.dashboard-reject-dialog-actions { display: flex; justify-content: flex-end; gap: 9px; margin-top: 20px; }
+.dashboard-reject-dialog-actions button { min-height: 40px; padding: 0 15px; border-radius: 9px; cursor: pointer; font: inherit; font-size: 12px; font-weight: 700; transition: .18s ease; }
+.dashboard-dialog-cancel { border: 1px solid #e1e5eb; background: #fff; color: #596579; }
+.dashboard-dialog-confirm { border: 1px solid #b94640; background: #b94640; color: #fff; }
+.dashboard-dialog-cancel:hover { background: #f7f8fa; }
+.dashboard-dialog-confirm:hover { background: #a83e39; }
+
+@keyframes dashboard-enter { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes dashboard-spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 760px) {
+    .dashboard-booking-schedule { flex-wrap: wrap; padding: 8px 10px; }
+    .dashboard-booking-schedule strong { margin-left: auto; }
+    .dashboard-booking-schedule small { width: 100%; margin: -3px 0 0; }
+    .dashboard-reject-dialog-panel { padding: 23px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+
 @media (min-width: 761px) {
     .dashboard-heading {
         align-items: center;
