@@ -146,9 +146,9 @@
         margin-top: 6px;
         font-size: 10px;
         padding: 2px 8px;
-        border: 1px solid var(--red);
+        border: 1px solid var(--gold);
         background: #fff;
-        color: var(--red);
+        color: var(--gold);
         border-radius: 4px;
         cursor: pointer;
     }

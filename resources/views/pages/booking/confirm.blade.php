@@ -17,10 +17,10 @@
 
         <div class="info-card" style="background:#fff;border:1px solid var(--line);border-radius:10px;padding:18px;margin:14px 0;">
             <h3 style="font-size:14px;font-weight:700;letter-spacing:.02em;margin:0 0 10px;">Informasi Pelanggan</h3>
-            <label for="name" style="display:block;font-size:11px;font-weight:700;letter-spacing:.04em;margin:8px 0 4px;color:#3a3229;">Nama Lengkap <span style="color:var(--red);">*</span></label>
+            <label for="name" style="display:block;font-size:11px;font-weight:700;letter-spacing:.04em;margin:8px 0 4px;color:#3a3229;">Nama Lengkap <span style="color:var(--gold);">*</span></label>
             <input id="name" name="name" type="text" required maxlength="255" placeholder="Raka Pratama" style="width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:6px;font-family:inherit;font-size:14px;background:#fdfcfb;">
 
-            <label for="phone" style="display:block;font-size:11px;font-weight:700;letter-spacing:.04em;margin:8px 0 4px;color:#3a3229;">Nomor WhatsApp Aktif <span style="color:var(--red);">*</span></label>
+            <label for="phone" style="display:block;font-size:11px;font-weight:700;letter-spacing:.04em;margin:8px 0 4px;color:#3a3229;">Nomor WhatsApp Aktif <span style="color:var(--gold);">*</span></label>
             <input id="phone" name="phone" type="tel" required maxlength="20" placeholder="+62 812-3456-7890" style="width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:6px;font-family:inherit;font-size:14px;background:#fdfcfb;">
 
             <label for="notes" style="display:block;font-size:11px;font-weight:700;letter-spacing:.04em;margin:8px 0 4px;color:#3a3229;">Catatan (opsional)</label>
@@ -43,8 +43,8 @@
         </div>
 
         <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:22px;padding-top:14px;border-top:1px solid var(--line);">
-            <a href="{{ route('booking.schedule', ['barber_id' => $barber->id, 'date' => $date]) }}" style="padding:10px 20px;font-size:11px;font-weight:700;letter-spacing:.03em;border-radius:6px;text-decoration:none;border:1px solid var(--red);color:var(--red);background:#fff;">← Kembali</a>
-            <button type="submit" class="primary" style="padding:10px 20px;font-size:11px;font-weight:700;letter-spacing:.03em;border-radius:6px;border:1px solid var(--red);background:var(--red);color:#fff;cursor:pointer;">Konfirmasi & Tiket →</button>
+            <a href="{{ route('booking.schedule', ['barber_id' => $barber->id, 'date' => $date]) }}" style="padding:10px 20px;font-size:11px;font-weight:700;letter-spacing:.03em;border-radius:6px;text-decoration:none;border:1px solid var(--gold);color:var(--gold);background:#fff;">← Kembali</a>
+            <button type="submit" class="primary" style="padding:10px 20px;font-size:11px;font-weight:700;letter-spacing:.03em;border-radius:6px;border:1px solid var(--gold);background:var(--gold);color:#fff;cursor:pointer;">Konfirmasi & Tiket →</button>
         </div>
     </form>
 </section>

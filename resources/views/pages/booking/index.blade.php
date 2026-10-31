@@ -33,7 +33,7 @@
 <style>
     .barber-selection { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; margin: 24px 0; }
     .barber-card.selectable { display: block; cursor: pointer; border: 2px solid var(--line); border-radius: 10px; overflow: hidden; text-align: left; background: #fff; transition: all .15s; text-decoration: none; color: inherit; }
-    .barber-card.selectable:hover { border-color: var(--red); box-shadow: 0 6px 18px rgba(0,0,0,.06); }
+    .barber-card.selectable:hover { border-color: var(--gold); box-shadow: 0 6px 18px rgba(0,0,0,.06); }
     .barber-card.selectable img { width: 100%; aspect-ratio: 4/5; object-fit: cover; display: block; border-radius: 8px 8px 0 0; }
     .barber-card.selectable h3 { font-size: 16px; font-weight: 700; letter-spacing: -.02em; margin: 10px 14px 4px; }
     .barber-card.selectable p { font-size: 12px; color: var(--muted); margin: 0 14px 6px; line-height: 1.45; }
