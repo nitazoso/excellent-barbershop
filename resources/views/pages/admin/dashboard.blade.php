@@ -15,15 +15,6 @@
         <div class="dashboard-flash dashboard-flash-error" role="alert">{{ session('error') }}</div>
     @endif
 
-    <div class="dashboard-heading">
-        <div>
-            <span class="dashboard-eyebrow">PANEL PENGELOLA</span>
-            <h1>Dashboard Admin</h1>
-            <p>{{ $todayDateLabel }}</p>
-        </div>
-        <a class="dashboard-all-link" href="{{ route('admin.bookings') }}">Semua booking <span aria-hidden="true">→</span></a>
-    </div>
-
     <section class="dashboard-stats" aria-label="Ringkasan booking">
         <article class="dashboard-stat-card dashboard-stat-total">
             <div><span>Total booking</span><span class="dashboard-stat-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8m-8 4h8m-8 4h5"/></svg></span></div>
@@ -56,9 +47,9 @@
         <div class="dashboard-section-heading">
             <div>
                 <span class="dashboard-eyebrow">PERLU TINDAKAN</span>
-                <h2>Antrean Perlu Dikonfirmasi</h2>
+                <h2>Antrean Perlu Ditinjau Segera</h2>
             </div>
-            <a href="{{ route('admin.bookings') }}">Lihat semua <span aria-hidden="true">→</span></a>
+            <span class="dashboard-pending-count">{{ $pendingBookingsCount }} Permintaan</span>
         </div>
 
         <div class="dashboard-booking-list">
@@ -120,9 +111,19 @@
             <span class="dashboard-today-count">{{ $todayBookingsCount }} booking</span>
         </div>
 
+        @php($todayBarbers = $todayBookings->pluck('barber')->filter()->unique('id')->values())
+        <nav class="dashboard-today-filters" aria-label="Filter jadwal berdasarkan barber">
+            <button class="is-active" type="button" data-barber-filter="all">Semua Kursi</button>
+            @foreach ($todayBarbers as $barber)
+                <button type="button" data-barber-filter="{{ $barber->id }}">
+                    {{ $barber->name }} ({{ str_pad((string) $loop->iteration, 2, '0', STR_PAD_LEFT) }})
+                </button>
+            @endforeach
+        </nav>
+
         <div class="dashboard-today-list">
             @forelse ($todayBookings as $booking)
-                <article class="dashboard-today-item">
+                <article class="dashboard-today-item" data-barber-id="{{ $booking->barber_id }}">
                     <time>{{ substr($booking->start_time, 0, 5) }}</time>
                     <div class="dashboard-today-details">
                         <strong>{{ $booking->customer->name }}</strong>
@@ -142,6 +143,21 @@
 
 @push('scripts')
     <script>
+        document.querySelectorAll('.dashboard-today-filters [data-barber-filter]').forEach((filterButton) => {
+            filterButton.addEventListener('click', () => {
+                const selectedBarberId = filterButton.dataset.barberFilter;
+
+                document.querySelectorAll('.dashboard-today-filters [data-barber-filter]').forEach((button) => {
+                    button.classList.toggle('is-active', button === filterButton);
+                });
+
+                document.querySelectorAll('.dashboard-today-item[data-barber-id]').forEach((bookingItem) => {
+                    bookingItem.hidden = selectedBarberId !== 'all'
+                        && bookingItem.dataset.barberId !== selectedBarberId;
+                });
+            });
+        });
+
         function rejectDashboardBooking(button) {
             const rejectionReason = window.prompt('Masukkan alasan penolakan booking:');
 

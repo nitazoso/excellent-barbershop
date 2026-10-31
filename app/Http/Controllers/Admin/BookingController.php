@@ -43,7 +43,7 @@ class BookingController extends Controller
         $barbers = Barber::query()->orderBy('name')->get();
         $summary = $this->calculateSummary($this->buildFilteredQuery($filters));
 
-        return view('pages.admin.bookings', compact('bookings', 'barbers', 'filters', 'summary'));
+        return view('pages.admin.bookings.index', compact('bookings', 'barbers', 'filters', 'summary'));
     }
 
     /**
@@ -156,7 +156,7 @@ class BookingController extends Controller
 
         $barbers = Barber::query()->orderBy('name')->get();
 
-        return view('pages.admin.bookings', [
+        return view('pages.admin.bookings.index', [
             'bookings' => $this->buildFilteredQuery($filters)->paginate(20)->withQueryString(),
             'barbers' => $barbers,
             'filters' => $filters,
@@ -178,7 +178,7 @@ class BookingController extends Controller
         $summary = $this->calculateSummary($this->buildFilteredQuery($filters));
         $generatedAt = now();
 
-        $pdf = Pdf::loadView('pages.admin.bookings-pdf', compact('bookings', 'filters', 'summary', 'generatedAt'))
+        $pdf = Pdf::loadView('pages.admin.bookings.bookings-pdf', compact('bookings', 'filters', 'summary', 'generatedAt'))
             ->setPaper('a4', 'landscape');
 
         $filename = 'laporan-booking-'.now()->format('Ymd_His').'.pdf';

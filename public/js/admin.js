@@ -1,5 +1,6 @@
 const adminMenuToggle = document.querySelector('.admin-menu-toggle');
 const adminMenuClose = document.querySelector('.admin-menu-close');
+const adminSidebarBackdrop = document.querySelector('.admin-sidebar-backdrop');
 const adminShell = document.querySelector('.admin-shell');
 
 adminMenuToggle?.setAttribute(
@@ -20,3 +21,4 @@ function toggleAdminSidebar(forceOpen = null) {
 
 adminMenuToggle?.addEventListener('click', () => toggleAdminSidebar());
 adminMenuClose?.addEventListener('click', () => toggleAdminSidebar(false));
+adminSidebarBackdrop?.addEventListener('click', () => toggleAdminSidebar(false));

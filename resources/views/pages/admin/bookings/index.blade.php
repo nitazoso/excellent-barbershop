@@ -280,6 +280,128 @@
         resize: vertical;
         box-sizing: border-box;
     }
+
+    .admin-page-heading span,
+    .admin-page-heading>a {
+        color: #a87920;
+    }
+    .admin-main {
+        background: #f5f8fc;
+        color: #17243a;
+        font-family: Inter, Arial, sans-serif;
+    }
+    .admin-page-heading h1 {
+        color: #17243a;
+        font-family: Inter, Arial, sans-serif;
+        font-size: 20px;
+        font-weight: 800;
+        letter-spacing: -.03em;
+    }
+    .admin-page-heading p,
+    .booking-meta,
+    .detail-item strong,
+    .filter-group label,
+    .modal-box p {
+        color: #63748b;
+    }
+    .summary-card,
+    .filter-panel,
+    .booking-card,
+    .modal-box {
+        border-color: #e6ebf2;
+    }
+    .summary-card span {
+        color: #63748b;
+    }
+    .summary-card strong {
+        color: #17243a;
+        font-family: Inter, Arial, sans-serif;
+        font-size: 26px;
+    }
+    .summary-card.highlight strong {
+        color: #c99b3f;
+    }
+    .summary-card.confirmed strong {
+        color: #258050;
+    }
+    .summary-card.pending strong {
+        color: #a76517;
+    }
+    .summary-card.rejected strong {
+        color: #b84b43;
+    }
+    .filter-group input,
+    .filter-group select,
+    .modal-box textarea {
+        border-color: #e6ebf2;
+        color: #17243a;
+        font-family: Inter, Arial, sans-serif;
+    }
+    .btn-primary,
+    .btn-success {
+        background: #14233b;
+        color: #fff;
+    }
+    .btn-secondary {
+        border-color: #e6ebf2;
+        background: #fff;
+        color: #46566d;
+    }
+    .btn-danger {
+        background: #e34d5d;
+        color: #fff;
+    }
+    .booking-card:hover {
+        border-color: #c99b3f;
+    }
+    .booking-header,
+    .booking-actions {
+        border-color: #e6ebf2;
+    }
+    .booking-code {
+        color: #17243a;
+        font-family: Inter, Arial, sans-serif;
+        font-size: 14px;
+    }
+    .detail-item strong {
+        font-size: 10px;
+    }
+    .badge-pending {
+        border-color: #f0d391;
+        background: #fff0d7;
+        color: #a76517;
+    }
+    .badge-confirmed {
+        border-color: #bde8cf;
+        background: #e5f6ec;
+        color: #258050;
+    }
+    .badge-rejected {
+        border-color: #f2c5c3;
+        background: #fff0ef;
+        color: #b84b43;
+    }
+    .rejection-box {
+        border-left-color: #b84b43;
+        background: #fff0ef;
+        color: #b84b43;
+    }
+    .booking-card > div[style],
+    .modal-box label {
+        color: #63748b !important;
+    }
+    .booking-actions > span[style*="#059669"] {
+        color: #258050 !important;
+    }
+    .booking-actions > span[style*="#dc2626"],
+    .modal-box label span {
+        color: #b84b43 !important;
+    }
+    .admin-panel {
+        border-color: #e6ebf2;
+        background: #fff;
+        color: #17243a;
+    }
 </style>
 @endpush
 
@@ -293,9 +415,6 @@
         <div style="display: flex; gap: 10px;">
             <a href="{{ route('admin.bookings.export-pdf', request()->query()) }}" class="btn btn-secondary">
                 📄 EKSPOR PDF
-            </a>
-            <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary">
-                ← DASHBOARD
             </a>
         </div>
     </div>

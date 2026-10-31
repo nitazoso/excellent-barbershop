@@ -9,3 +9,811 @@
 @media(max-width:520px){.dashboard-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.dashboard-stat-card{min-width:0}}
 
 .dashboard-status-rejected{background:#fff0ef;color:#b84b43}
+.dashboard-pending-count,.dashboard-today-filters,.dashboard-title-desktop{display:none}
+.dashboard-eyebrow-desktop{display:none}
+
+@media (min-width: 761px) {
+    .dashboard-eyebrow-mobile {
+        display: none;
+    }
+
+    .dashboard-eyebrow-desktop {
+        display: inline;
+    }
+
+    .dashboard-title-mobile {
+        display: none;
+    }
+
+    .dashboard-title-desktop {
+        display: inline;
+    }
+
+    .dashboard-heading .dashboard-eyebrow {
+        font-size: 10px;
+    }
+
+    .dashboard-heading p {
+        font-size: 32px;
+    }
+
+    .dashboard-stat-card>div {
+        font-size: 10px;
+    }
+
+    .dashboard-stat-card>strong {
+        font-size: 24px;
+    }
+
+    .dashboard-section-heading h2 {
+        font-size: 18px;
+    }
+
+    .dashboard-pending-count {
+        font-size: 10px;
+    }
+
+    .dashboard-booking-code,
+    .dashboard-booking-age {
+        font-size: 10px;
+    }
+
+    .dashboard-booking-card h3 {
+        font-size: 15px;
+    }
+
+    .dashboard-booking-meta {
+        font-size: 12px;
+    }
+
+    .dashboard-booking-schedule,
+    .dashboard-booking-schedule strong {
+        font-size: 10px;
+    }
+
+    .dashboard-booking-actions button,
+    .dashboard-confirm-all-button {
+        font-size: 11px;
+    }
+
+    .dashboard-today-filters button {
+        font-size: 10px;
+    }
+
+    .dashboard-today-item time,
+    .dashboard-today-details strong {
+        font-size: 12px;
+    }
+
+    .dashboard-today-details span {
+        font-size: 10px;
+    }
+
+    .dashboard-status {
+        font-size: 9px;
+    }
+
+    .admin-main-dashboard {
+        display: grid;
+        grid-template-columns: minmax(0, 1.42fr) minmax(300px, 1fr);
+        align-content: start;
+        column-gap: 20px;
+        row-gap: 0;
+        margin-left: 252px;
+        padding: 88px 30px 40px;
+        background: #f5f8fc;
+    }
+
+    .admin-main-dashboard > .dashboard-flash,
+    .admin-main-dashboard > .dashboard-heading,
+    .admin-main-dashboard > .dashboard-stats,
+    .admin-main-dashboard > .dashboard-quick-links {
+        grid-column: 1 / -1;
+    }
+
+    .dashboard-heading {
+        align-items: center;
+        margin-bottom: 13px;
+    }
+
+    .dashboard-heading .dashboard-eyebrow {
+        color: #8292a8;
+        font-size: 8px;
+        letter-spacing: .08em;
+    }
+
+    .dashboard-heading h1 {
+        display: none;
+    }
+
+    .dashboard-heading p {
+        margin-top: 3px;
+        color: #14233b;
+        font-size: 20px;
+        font-weight: 800;
+        letter-spacing: -.03em;
+    }
+
+    .dashboard-all-link {
+        display: none;
+    }
+
+    .dashboard-stats {
+        gap: 10px;
+    }
+
+    .dashboard-stat-card {
+        min-height: 80px;
+        padding: 12px;
+        border-radius: 11px;
+        box-shadow: none;
+    }
+
+    .dashboard-stat-card>div {
+        color: #63748b;
+        font-size: 8px;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+
+    .dashboard-stat-card>strong {
+        margin-top: 8px;
+        font-size: 21px;
+    }
+
+    .dashboard-stat-card>small {
+        display: none;
+    }
+
+    .dashboard-quick-links {
+        justify-content: flex-end;
+        gap: 7px;
+        margin: 12px 0 18px;
+        padding-right: 0;
+    }
+
+    .dashboard-quick-links a {
+        min-height: 25px;
+        padding: 0 10px;
+        border-color: #e5eaf1;
+        border-radius: 16px;
+        color: #46566d;
+        font-size: 8px;
+    }
+
+    .dashboard-quick-links a:first-child {
+        border-color: #e5eaf1;
+        background: #fff;
+        color: #46566d;
+    }
+
+    .dashboard-quick-links a:first-child svg {
+        stroke: #b0883d;
+    }
+
+    .admin-main-dashboard > .dashboard-section {
+        min-width: 0;
+        margin-top: 0;
+    }
+
+    .dashboard-section:not(.dashboard-today-section) {
+        grid-column: 1;
+    }
+
+    .dashboard-today-section {
+        grid-column: 2;
+        margin-bottom: 20px;
+    }
+
+    .dashboard-section-heading {
+        align-items: center;
+        margin-bottom: 10px;
+    }
+
+    .dashboard-section-heading .dashboard-eyebrow,
+    .dashboard-section-heading > a {
+        display: none;
+    }
+
+    .dashboard-section-heading h2 {
+        margin: 0;
+        color: #17243a;
+        font-size: 13px;
+        letter-spacing: -.01em;
+    }
+
+    .dashboard-section-heading h2::before {
+        content: "";
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        margin-right: 7px;
+        border-radius: 50%;
+        background: #fff0cf;
+        vertical-align: -4px;
+    }
+
+    .dashboard-booking-list {
+        gap: 9px;
+    }
+
+    .dashboard-booking-card {
+        padding: 12px;
+        border-radius: 11px;
+        box-shadow: none;
+    }
+
+    .dashboard-booking-code,
+    .dashboard-booking-age {
+        font-size: 8px;
+    }
+
+    .dashboard-booking-card h3 {
+        font-size: 11px;
+    }
+
+    .dashboard-booking-meta {
+        margin: 6px 0 8px;
+        font-size: 9px;
+    }
+
+    .dashboard-booking-schedule {
+        min-height: 24px;
+        border: 0;
+        background: #f5f7fa;
+        font-size: 8px;
+    }
+
+    .dashboard-booking-schedule strong {
+        font-size: 8px;
+    }
+
+    .dashboard-booking-actions {
+        gap: 7px;
+        margin-top: 9px;
+    }
+
+    .dashboard-booking-actions button {
+        height: 27px;
+        font-size: 8px;
+    }
+
+    .dashboard-confirm-all-form {
+        margin-top: 12px;
+    }
+
+    .dashboard-confirm-all-button {
+        min-height: 31px;
+        border-radius: 10px;
+        font-size: 9px;
+    }
+
+    .dashboard-today-section .dashboard-section-heading h2::before {
+        display: none;
+    }
+
+    .dashboard-today-count {
+        display: none;
+    }
+
+    .dashboard-today-list {
+        padding: 9px;
+        border-radius: 11px;
+    }
+
+    .dashboard-today-item {
+        min-height: 43px;
+        gap: 9px;
+        margin-bottom: 5px;
+        padding: 7px 9px;
+        border: 1px solid #e8edf3;
+        border-radius: 9px;
+    }
+
+    .dashboard-today-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .dashboard-today-item time {
+        width: 52px;
+        font-size: 9px;
+    }
+
+    .dashboard-today-details strong {
+        font-size: 9px;
+    }
+
+    .dashboard-today-details span {
+        font-size: 8px;
+    }
+
+    .dashboard-status {
+        padding: 4px 6px;
+        font-size: 7px;
+    }
+}
+
+@media (min-width: 761px) and (max-width: 1100px) {
+    .admin-sidebar {
+        width: 205px;
+    }
+
+    .admin-topbar {
+        left: 205px;
+    }
+
+    .admin-main-dashboard {
+        grid-template-columns: minmax(0, 1fr) minmax(260px, .9fr);
+        column-gap: 14px;
+        margin-left: 205px;
+        padding-right: 18px;
+        padding-left: 18px;
+    }
+}
+
+@media (min-width: 761px) {
+    .dashboard-quick-links {
+        display: none;
+    }
+
+    .dashboard-pending-count {
+        display: inline-flex;
+        flex: none;
+        padding: 4px 8px;
+        border-radius: 12px;
+        background: #fff2d4;
+        color: #9f701d;
+        font-size: 8px;
+        font-weight: 700;
+    }
+
+    .dashboard-today-filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin: 0 0 9px;
+    }
+
+    .dashboard-today-filters button {
+        min-height: 23px;
+        padding: 0 9px;
+        border: 1px solid #e4e9ef;
+        border-radius: 14px;
+        background: #fff;
+        color: #58677c;
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 8px;
+        font-weight: 700;
+    }
+
+    .dashboard-today-filters button.is-active {
+        border-color: #14233b;
+        background: #14233b;
+        color: #fff;
+    }
+
+    .dashboard-today-item[hidden] {
+        display: none;
+    }
+}
+
+@media (min-width: 761px) {
+    .dashboard-heading {
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .dashboard-heading .dashboard-eyebrow {
+        font-size: 12px;
+    }
+
+    .dashboard-heading p {
+        font-size: 30px;
+    }
+
+    .dashboard-all-link {
+        display: none;
+    }
+
+    .dashboard-stats {
+        gap: 16px;
+        margin-bottom: 28px;
+    }
+
+    .dashboard-stat-card {
+        min-height: 112px;
+        padding: 18px 20px;
+        border-radius: 16px;
+    }
+
+    .dashboard-stat-card>div {
+        font-size: 12px;
+    }
+
+    .dashboard-stat-icon {
+        width: 32px;
+        height: 32px;
+        border-radius: 9px;
+    }
+
+    .dashboard-stat-icon svg {
+        width: 16px;
+        height: 16px;
+    }
+
+    .dashboard-stat-card>strong {
+        margin-top: 12px;
+        font-size: 30px;
+    }
+
+    .dashboard-section-heading {
+        margin-bottom: 12px;
+    }
+
+    .dashboard-section-heading h2 {
+        font-size: 18px;
+    }
+
+    .dashboard-pending-count {
+        padding: 6px 11px;
+        font-size: 12px;
+    }
+
+    .dashboard-booking-list {
+        gap: 14px;
+    }
+
+    .dashboard-booking-card {
+        padding: 18px 20px;
+        border-radius: 16px;
+    }
+
+    .dashboard-booking-code,
+    .dashboard-booking-age {
+        font-size: 12px;
+    }
+
+    .dashboard-booking-card h3 {
+        margin-top: 5px;
+        font-size: 16px;
+    }
+
+    .dashboard-booking-meta {
+        margin: 7px 0 12px;
+        font-size: 14px;
+    }
+
+    .dashboard-booking-schedule {
+        min-height: 42px;
+        gap: 10px;
+        padding: 0 14px;
+        border-radius: 11px;
+        font-size: 12px;
+    }
+
+    .dashboard-booking-schedule strong {
+        font-size: 12px;
+    }
+
+    .dashboard-booking-actions {
+        gap: 10px;
+        margin-top: 12px;
+    }
+
+    .dashboard-booking-actions button {
+        height: 42px;
+        border-radius: 10px;
+        font-size: 12px;
+    }
+
+    .dashboard-confirm-all-form {
+        margin-top: 14px;
+    }
+
+    .dashboard-confirm-all-button {
+        min-height: 44px;
+        border-radius: 13px;
+        font-size: 12px;
+    }
+
+    .dashboard-today-filters {
+        gap: 8px;
+        margin-bottom: 12px;
+    }
+
+    .dashboard-today-filters button {
+        min-height: 32px;
+        padding: 0 13px;
+        font-size: 11px;
+    }
+
+    .dashboard-today-list {
+        padding: 12px;
+        border-radius: 16px;
+    }
+
+    .dashboard-today-item {
+        min-height: 58px;
+        gap: 12px;
+        margin-bottom: 9px;
+        padding: 10px 12px;
+        border-radius: 12px;
+    }
+
+    .dashboard-today-item time {
+        width: 72px;
+        font-size: 13px;
+    }
+
+    .dashboard-today-details strong {
+        font-size: 13px;
+    }
+
+    .dashboard-today-details span {
+        font-size: 11px;
+    }
+
+    .dashboard-status {
+        padding: 6px 9px;
+        font-size: 10px;
+    }
+}
+
+@media (min-width: 761px) and (max-width: 1100px) {
+    .dashboard-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .dashboard-stat-card {
+        min-height: 100px;
+    }
+}
+
+.dashboard-quick-links,
+.dashboard-today-count,
+.dashboard-section-heading .dashboard-eyebrow {
+    display: none;
+}
+
+.dashboard-heading {
+    align-items: center;
+}
+
+.dashboard-heading h1 {
+    display: block;
+    margin: 4px 0 0;
+    color: #14233b;
+    font-size: 20px;
+    font-weight: 800;
+    letter-spacing: -.03em;
+}
+
+.dashboard-heading .dashboard-eyebrow {
+    color: #8292a8;
+    font-size: 12px;
+}
+
+.dashboard-section-heading h2::before {
+    content: "";
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    margin-right: 7px;
+    border-radius: 50%;
+    background: #fff0cf;
+    vertical-align: -4px;
+}
+
+.dashboard-stat-card > small {
+    display: none;
+}
+
+.dashboard-today-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0 0 12px;
+}
+
+.dashboard-today-filters button {
+    min-height: 30px;
+    padding: 0 12px;
+    border: 1px solid #e4e9ef;
+    border-radius: 14px;
+    background: #fff;
+    color: #58677c;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.dashboard-today-filters button.is-active {
+    border-color: #14233b;
+    background: #14233b;
+    color: #fff;
+}
+
+@media (max-width: 760px) {
+    .admin-main-dashboard {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        align-content: start;
+        row-gap: 0;
+    }
+
+    .admin-main-dashboard > .dashboard-section {
+        grid-column: 1;
+        min-width: 0;
+    }
+
+    .dashboard-heading {
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
+
+    .dashboard-heading h1 {
+        font-size: 20px;
+    }
+
+    .dashboard-stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+        margin-bottom: 22px;
+    }
+
+    .dashboard-stat-card {
+        min-height: 96px;
+        padding: 14px;
+        border-radius: 12px;
+        box-shadow: none;
+    }
+
+    .dashboard-stat-card > div {
+        gap: 6px;
+        font-size: 12px;
+    }
+
+    .dashboard-stat-icon {
+        width: 28px;
+        height: 28px;
+        flex: none;
+    }
+
+    .dashboard-stat-card > strong {
+        margin-top: 10px;
+        font-size: 30px;
+    }
+
+    .dashboard-section:not(.dashboard-today-section) {
+        margin-top: 0;
+    }
+
+    .dashboard-section-heading {
+        align-items: center;
+        margin-bottom: 12px;
+    }
+
+    .dashboard-section-heading h2 {
+        margin: 0;
+        font-size: 18px;
+    }
+
+    .dashboard-pending-count {
+        display: inline-flex;
+        flex: none;
+        padding: 5px 9px;
+        border-radius: 12px;
+        background: #fff2d4;
+        color: #9f701d;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .dashboard-booking-list {
+        gap: 12px;
+    }
+
+    .dashboard-booking-card {
+        padding: 16px;
+        border-radius: 13px;
+        box-shadow: none;
+    }
+
+    .dashboard-booking-code,
+    .dashboard-booking-age {
+        font-size: 12px;
+    }
+
+    .dashboard-booking-card h3 {
+        margin-top: 5px;
+        font-size: 16px;
+    }
+
+    .dashboard-booking-meta {
+        margin: 7px 0 10px;
+        font-size: 14px;
+    }
+
+    .dashboard-booking-schedule {
+        min-height: 38px;
+        flex-wrap: wrap;
+        gap: 6px;
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+
+    .dashboard-booking-schedule strong {
+        margin-left: auto;
+        font-size: 12px;
+    }
+
+    .dashboard-booking-actions {
+        gap: 8px;
+        margin-top: 10px;
+    }
+
+    .dashboard-booking-actions button {
+        height: 38px;
+        font-size: 12px;
+    }
+
+    .dashboard-confirm-all-form {
+        margin-top: 12px;
+    }
+
+    .dashboard-confirm-all-button {
+        min-height: 40px;
+        font-size: 12px;
+    }
+
+    .dashboard-today-section {
+        margin-top: 22px !important;
+    }
+
+    .dashboard-today-section .dashboard-section-heading h2::before {
+        display: none;
+    }
+
+    .dashboard-today-list {
+        padding: 10px;
+        border-radius: 13px;
+    }
+
+    .dashboard-today-item {
+        min-height: 52px;
+        gap: 10px;
+        margin-bottom: 8px;
+        padding: 8px 10px;
+        border: 1px solid #e8edf3;
+        border-radius: 10px;
+    }
+
+    .dashboard-today-item:last-child {
+        margin-bottom: 0;
+    }
+
+    .dashboard-today-item time {
+        width: 55px;
+        font-size: 13px;
+    }
+
+    .dashboard-today-details strong {
+        font-size: 13px;
+    }
+
+    .dashboard-today-details span {
+        font-size: 11px;
+    }
+
+    .dashboard-status {
+        padding: 5px 7px;
+        font-size: 10px;
+    }
+
+    .dashboard-today-item[hidden] {
+        display: none;
+    }
+}

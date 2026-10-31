@@ -20,7 +20,19 @@ Route::get('/booking', [BookingController::class, 'index'])
 Route::post('/booking', [BookingController::class, 'store'])
     ->name('booking.store');
 
+// API jadwal untuk wizard booking
+Route::get('/api/booking/schedules', [BookingController::class, 'schedules'])
+    ->name('booking.schedules');
+
+Route::get('/booking/schedule', [BookingController::class, 'schedule'])
+    ->name('booking.schedule');
+
+Route::get('/booking/confirm', [BookingController::class, 'confirm'])
+    ->name('booking.confirm');
+
 // Hasil booking
+Route::get('/booking/result/{booking_code}/download', [BookingResultController::class, 'download'])
+    ->name('booking.result.download');
 Route::get('/booking/result/{booking_code}', [BookingResultController::class, 'show'])
     ->name('booking.result');
 
@@ -35,7 +47,7 @@ Route::post('/cek-booking', [CheckBookingController::class, 'check'])
 $adminPath = config('services.admin.path', env('ADMIN_PATH', 'ctrl-excellent'));
 
 Route::prefix($adminPath)->name('admin.')->group(function () use ($adminPath): void {
-    Route::redirect('/', '/'.$adminPath.'/dashboard')->name('index');
+    Route::redirect('/', '/' . $adminPath . '/dashboard')->name('index');
 
     Route::middleware(['throttle:10,1'])->group(function (): void {
         Route::get('/login', [GoogleAuthController::class, 'showLogin'])->name('login');

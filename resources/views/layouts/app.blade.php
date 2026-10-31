@@ -11,8 +11,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/app.css">
     @stack('styles')
+    @if (request()->routeIs('booking.*'))
+        <link rel="stylesheet" href="/css/booking-theme.css">
+    @endif
 </head>
-<body>
+<body class="{{ request()->routeIs('booking.*') ? 'booking-theme' : '' }}">
 <div class="frame">
     <div class="page">
         <x-navbar />

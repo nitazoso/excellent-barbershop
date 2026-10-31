@@ -1,0 +1,119 @@
+body.booking-theme {
+    --paper: #f5f8fc;
+    --ink: #17243a;
+    --muted: #63748b;
+    --line: #e6ebf2;
+    --red: #14233b;
+    --red-dark: #0f1d33;
+    --gold: #c99b3f;
+    --green: #e5f6ec;
+    background: #f5f8fc;
+    color: #17243a;
+}
+
+.booking-theme .frame,
+.booking-theme .page {
+    background: #f5f8fc;
+}
+
+.booking-theme .nav {
+    border-color: #e6ebf2;
+    background: #fff;
+}
+
+.booking-theme .nav-links a,
+.booking-theme .nav-cta,
+.booking-theme .user-link {
+    color: #17243a;
+}
+
+.booking-theme .volume,
+.booking-theme .section-kicker {
+    color: #a87920;
+}
+
+.booking-theme .booking-page {
+    border-color: #e6ebf2;
+    background: #fff;
+    color: #17243a;
+    box-shadow: 0 3px 10px #14213b08;
+}
+
+.booking-theme .booking-page :is(h1, h2, h3, label, strong) {
+    color: #17243a !important;
+}
+
+.booking-theme .booking-page p,
+.booking-theme .booking-page small {
+    color: #63748b !important;
+}
+
+.booking-theme .barber-card.selectable,
+.booking-theme .info-card,
+.booking-theme .summary-card,
+.booking-theme .booking-confirm-card,
+.booking-theme .receipt-code,
+.booking-theme .booking-page input,
+.booking-theme .booking-page textarea {
+    border-color: #e6ebf2 !important;
+    background-color: #fff !important;
+}
+
+.booking-theme .barber-card.selectable:hover {
+    border-color: #c99b3f !important;
+}
+
+.booking-theme .barber-card.selectable p.rating {
+    color: #a87920 !important;
+}
+
+.booking-theme .status-badge {
+    color: #258050 !important;
+}
+
+.booking-theme .booking-page :is(.session-block, .receipt-inner, .date-pill:not(.is-selected)) {
+    background-color: #f5f8fc !important;
+}
+
+.booking-theme .booking-page .date-pill:not(.is-selected) {
+    color: #17243a !important;
+}
+
+.booking-theme .booking-page .date-pill.is-selected,
+.booking-theme .booking-page .time-slot.is-selected,
+.booking-theme .booking-page .primary,
+.booking-theme .booking-page .btn-dark {
+    border-color: #14233b !important;
+    background-color: #14233b !important;
+    color: #fff !important;
+}
+
+.booking-theme .booking-page .time-slot.is-booked {
+    border-color: #f0f2f5 !important;
+    background-color: #f0f2f5 !important;
+    color: #9ba4b1 !important;
+}
+
+.booking-theme .booking-page .badge-gold {
+    background-color: #c99b3f !important;
+}
+
+.booking-theme .booking-page .receipt-detail,
+.booking-theme .booking-page .receipt-detail strong,
+.booking-theme .booking-page .receipt-header .logo {
+    color: #17243a !important;
+}
+
+.booking-theme .booking-page .receipt-detail div {
+    border-color: #e6ebf2 !important;
+}
+
+.booking-theme .booking-page .qr-box {
+    background-color: #14233b !important;
+}
+
+.booking-theme .booking-page .btn-ghost,
+.booking-theme .booking-page .receipt-code button {
+    border-color: #14233b !important;
+    color: #14233b !important;
+}
