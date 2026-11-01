@@ -31,92 +31,162 @@ class DashboardSeeder extends Seeder
             ]
         );
 
-        // 2. Data Barbers sesuai Screenshot Figma: Bramantyo (01), Dimas W. (02), Rendy S. (03)
+        // 2. Data Barbers sesuai Screenshot Figma: Bramantyo (01), Dimas Wicaksono (02), Rendy Setiawan (03), Fajar Nugraha (04)
         $barber1 = Barber::query()->updateOrCreate(
             ['id' => 1],
             [
                 'name' => 'Bramantyo',
-                'description' => 'Master Barber (Spesialis Klasik & Razor Fade)',
+                'chair_number' => 1,
+                'role_title' => 'Founder / Senior',
+                'specialization' => 'Atelier Specialist & Grooming Director',
+                'skills_tags' => 'Classic Scissor Cut, Gentlemen Taper Fade, Traditional Straight Razor',
+                'availability_status' => 'online',
+                'rating' => 4.96,
+                'review_count' => 124,
+                'scheduled_sessions_count' => 6,
+                'accept_public_booking' => true,
                 'is_active' => true,
+                'description' => 'Master Barber (Spesialis Klasik & Razor Fade)',
             ]
         );
 
         $barber2 = Barber::query()->updateOrCreate(
             ['id' => 2],
             [
-                'name' => 'Dimas W.',
-                'description' => 'Senior Stylist (Spesialis Modern Textured & Beard)',
+                'name' => 'Dimas Wicaksono',
+                'chair_number' => 2,
+                'role_title' => 'Master Barber',
+                'specialization' => 'Beard Architecture & Skin Fade Pro',
+                'skills_tags' => 'Beard Sculpting, Modern Skin Fade, Ritual Hot Towel',
+                'availability_status' => 'online',
+                'rating' => 4.98,
+                'review_count' => 98,
+                'scheduled_sessions_count' => 7,
+                'accept_public_booking' => true,
                 'is_active' => true,
+                'description' => 'Senior Stylist (Spesialis Modern Textured & Beard)',
             ]
         );
 
         $barber3 = Barber::query()->updateOrCreate(
             ['id' => 3],
             [
-                'name' => 'Rendy S.',
-                'description' => 'Artistic Barber (Spesialis Pompadour & Styling)',
+                'name' => 'Rendy Setiawan',
+                'chair_number' => 3,
+                'role_title' => 'Barber Stylist',
+                'specialization' => 'Contemporary Cut & Scalp Specialist',
+                'skills_tags' => 'Textured Crop, French Crop, Scalp Detox Ritual',
+                'availability_status' => 'online',
+                'rating' => 4.91,
+                'review_count' => 76,
+                'scheduled_sessions_count' => 6,
+                'accept_public_booking' => true,
                 'is_active' => true,
+                'description' => 'Artistic Barber (Spesialis Pompadour & Styling)',
+            ]
+        );
+
+        $barber4 = Barber::query()->updateOrCreate(
+            ['id' => 4],
+            [
+                'name' => 'Fajar Nugraha',
+                'chair_number' => 4,
+                'role_title' => 'Junior Stylist',
+                'specialization' => 'Sedang Dalam Program Sertifikasi',
+                'skills_tags' => 'Basic Cut & Assist',
+                'availability_status' => 'cuti',
+                'rating' => 4.80,
+                'review_count' => 15,
+                'scheduled_sessions_count' => 0,
+                'accept_public_booking' => false,
+                'warning_note' => 'Sedang masa pelatihan lanjutan atelier dan cuti operasional. Profil tidak muncul di web booking.',
+                'is_active' => false,
+                'description' => 'Junior Stylist dalam program sertifikasi atelier.',
             ]
         );
 
         // 3. Data Layanan sesuai Screenshot Figma
         $service1 = Service::query()->updateOrCreate(
-            ['name' => 'Classic Haircut & Wash'],
+            ['name' => 'Signature Royal Grooming'],
             [
-                'price' => 50000,
-                'duration_minutes' => 45,
-                'description' => 'Cuci rambut, potong rambut presisi, dan styling pomade.',
+                'category' => Service::CAT_HAIRCUT,
+                'badge' => 'BEST SELLER',
+                'price' => 120000,
+                'duration_minutes' => 60,
+                'description' => 'Potong rambut presisi, konsultasi bentuk wajah, cuci rambut 2x, pijat kepala & pundak, hot towel aromaterapi, tonic styling.',
                 'is_active' => true,
+                'is_featured' => true,
+                'show_in_widget' => true,
             ]
         );
 
         $service2 = Service::query()->updateOrCreate(
-            ['name' => 'Royal Beard Sculpt'],
+            ['name' => 'Classic Gentleman Fade'],
             [
-                'price' => 45000,
-                'duration_minutes' => 30,
-                'description' => 'Perawatan janggut dan kumis dengan handuk hangat aromaterapi.',
+                'category' => Service::CAT_HAIRCUT,
+                'badge' => null,
+                'price' => 85000,
+                'duration_minutes' => 45,
+                'description' => 'Cukur fade bertahap presisi (low/mid/high taper fade), cuci rambut, pendingin kulit kepala, styling pomade.',
                 'is_active' => true,
+                'is_featured' => false,
+                'show_in_widget' => true,
             ]
         );
 
         $service3 = Service::query()->updateOrCreate(
-            ['name' => 'Hot Towel & Styling'],
+            ['name' => 'Beard Sculpting & Hot Towel Shave'],
             [
-                'price' => 60000,
-                'duration_minutes' => 45,
-                'description' => 'Pijat kepala rileks, masker wajah, dan hot towel treatment.',
+                'category' => Service::CAT_BEARD,
+                'badge' => null,
+                'price' => 65000,
+                'duration_minutes' => 35,
+                'description' => 'Pembentukan jenggot dan kumis presisi dengan pisau silet steril, kompres handuk hangat rempah, beard oil organic.',
                 'is_active' => true,
+                'is_featured' => false,
+                'show_in_widget' => true,
             ]
         );
 
         $service4 = Service::query()->updateOrCreate(
-            ['name' => 'Classic Cut'],
+            ['name' => 'Scalp Revitalizing Detox'],
             [
-                'price' => 50000,
-                'duration_minutes' => 60,
-                'description' => 'Pangkas rambut klasik rapi presisi 60 menit.',
+                'category' => Service::CAT_TREATMENT,
+                'badge' => null,
+                'price' => 75000,
+                'duration_minutes' => 40,
+                'description' => 'Terapi pembersihan pori-pori kulit kepala, scrub ketombe, serum pendingin, dan pijatan relaksasi mendalam.',
                 'is_active' => true,
+                'is_featured' => false,
+                'show_in_widget' => true,
             ]
         );
 
         $service5 = Service::query()->updateOrCreate(
-            ['name' => 'Royal Cut'],
+            ['name' => 'Royal Hot Towel Shave Only'],
             [
-                'price' => 75000,
-                'duration_minutes' => 60,
-                'description' => 'Paket Royal Haircut dengan ritual botani.',
+                'category' => Service::CAT_BEARD,
+                'badge' => null,
+                'price' => 50000,
+                'duration_minutes' => 30,
+                'description' => 'Cukur bersih jenggot/kumis tanpa potong rambut dengan busa hangat dan pisau silet ganti baru.',
                 'is_active' => true,
+                'is_featured' => false,
+                'show_in_widget' => true,
             ]
         );
 
         $service6 = Service::query()->updateOrCreate(
-            ['name' => 'Executive Treatment'],
+            ['name' => 'Premium Hair Coloring'],
             [
-                'price' => 120000,
-                'duration_minutes' => 60,
-                'description' => 'Perawatan eksekutif lengkap dengan hair wash & massage.',
-                'is_active' => true,
+                'category' => Service::CAT_HAIRCUT,
+                'badge' => 'RESTOCK BAHAN',
+                'price' => 180000,
+                'duration_minutes' => 70,
+                'description' => 'Pewarnaan rambut eksklusif pria (hitam pekat, dark ash grey). Sedang restock produk kimia import.',
+                'is_active' => false,
+                'is_featured' => false,
+                'show_in_widget' => false,
             ]
         );
 
@@ -138,8 +208,9 @@ class DashboardSeeder extends Seeder
         }
 
         // Hapus data booking & jadwal hari ini sebelum re-seed agar angka presisi sesuai Figma
-        Booking::query()->whereDate('booking_date', $today)->delete();
-        Schedule::query()->whereDate('date', $today)->delete();
+        Booking::query()->where('booking_code', 'like', 'EXC-%')->delete();
+        Booking::query()->whereDate('booking_date', $today->toDateString())->delete();
+        Schedule::query()->whereDate('date', $today->toDateString())->delete();
 
         // 5. Buat Jadwal untuk Hari Ini
         $barbers = [$barber1, $barber2, $barber3];

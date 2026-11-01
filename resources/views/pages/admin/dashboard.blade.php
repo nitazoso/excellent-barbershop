@@ -656,6 +656,44 @@
         gap: 6px;
         white-space: nowrap;
     }
+
+    .figma-grid-2x2 > *, .queue-card, .timeline-card-item { min-width: 0; }
+    .queue-customer-name, .queue-resi, .slot-value { overflow-wrap: anywhere; }
+    .figma-modal-card { max-height: calc(100dvh - 32px); overflow-y: auto; }
+    @media (min-width: 768px) {
+        .op-header-group { margin-bottom:24px; }
+        .op-title { font-size:26px; }
+        .figma-grid-2x2 { grid-template-columns:repeat(4, minmax(0, 1fr)); gap:16px; }
+        .figma-card { min-height:120px; padding:18px; }
+        .card-big-num { font-size:34px; }
+        .quick-pill-row { gap:12px; }
+        .figma-section { margin-bottom:36px; }
+        .queue-cards-list { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:16px; }
+        .timeline-container-box { padding:16px; gap:10px; }
+    }
+    @media (min-width: 1100px) {
+        .queue-cards-list { grid-template-columns:repeat(3, minmax(0, 1fr)); }
+    }
+    @media (max-width: 380px) {
+        .figma-grid-2x2 { gap: 8px; }
+        .figma-card { padding: 11px 10px; }
+        .card-kicker { font-size: 8px; }
+        .card-big-num { font-size: 24px; }
+        .quick-pill-row { gap: 6px; }
+        .quick-pill-btn { min-width: 88px; font-size: 10px; }
+        .queue-card { padding: 12px; }
+        .queue-slot-graybox { gap: 8px; padding: 8px; }
+        .queue-slot-graybox > * { min-width: 0; }
+        .queue-actions-row { gap: 7px; }
+        .btn-tolak, .btn-konfirmasi { font-size: 10px; }
+        .timeline-container-box { padding: 7px; }
+        .timeline-card-item { padding: 9px; }
+        .t-left-time { width: 62px; }
+        .pill-status-tag { font-size: 8px; padding: 4px 6px; }
+        .figma-modal-card { padding: 16px; }
+        .modal-btns-row { flex-wrap: wrap; }
+        .toast-box-notify { width: calc(100vw - 28px); white-space: normal; justify-content: center; text-align: center; }
+    }
 </style>
 @endpush
 
