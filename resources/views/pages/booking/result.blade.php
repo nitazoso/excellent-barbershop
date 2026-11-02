@@ -29,7 +29,8 @@
             </div>
 
             <div class="receipt-detail">
-                <div><strong>Jadwal Sesi</strong> <span>{{ $booking->booking_date->format('l, d M Y') }}</span>
+                <div><strong>Jadwal Sesi (Terbaru)</strong> <span>{{ $booking->booking_date->format('l, d M Y') }} ·
+                        {{ substr($booking->start_time, 0, 5) }} WIB</span>
                 </div>
                 <div><strong>Sesi</strong>
                     <span>{{ $booking->start_time >= '15:00' && $booking->start_time < '19:30' ? 'Siang' : ($booking->start_time >= '19:30' ? 'Malam' : 'Waktu Istirahat') }}</span>
@@ -47,7 +48,17 @@
             </div>
         </div>
 
-        <a class="primary" href="{{ url('/') }}">← Kembali ke Beranda</a>
+
+        <div class="action-bar" style="margin-top:10px;">
+            <a href="{{ route('booking.reschedule', $booking->booking_code) }}"
+                style="padding:10px 20px;font-size:11px;font-weight:700;letter-spacing:.03em;border-radius:6px;text-decoration:none;border:1px solid var(--gold);color:var(--gold);background:#fff;">↔
+                Ubah Jadwal</a>
+            <a href="{{ route('booking.cancel', $booking->booking_code) }}"
+                style="padding:10px 20px;font-size:11px;font-weight:700;letter-spacing:.03em;border-radius:6px;text-decoration:none;border:1px solid #c0392b;color:#fff;background:#c0392b;">⊘
+                Batalkan</a>
+        </div>
+
+        <a class="primary" href="{{ url('/') }}" style="display:inline-block;margin-top:14px;">← Kembali ke Beranda</a>
     </div>
 </section>
 @endsection

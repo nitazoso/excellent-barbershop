@@ -1803,7 +1803,7 @@
             </div>
             <div class="detail-item time-detail">
                 <strong>◷</strong>
-                <span>{{ substr($booking->start_time, 0, 5) }} WIB</span>
+                <span>{{ substr($booking->start_time, 0, 5) }} WIB · {{ $booking->booking_date->format('d M Y') }} (Terbaru)</span>
             </div>
             <div class="detail-item price-detail">
                 <strong>Harga layanan</strong>
@@ -1865,7 +1865,7 @@
             @endif
         </div>
         <footer class="booking-card-footer">
-            <span>{{ $booking->booking_date->isToday() ? 'Hari Ini' : 'Jadwal' }} •
+            <span>{{ $booking->booking_date->isToday() ? 'Hari Ini' : 'Jadwal Terbaru' }} •
                 {{ $booking->booking_date->format('d M Y') }}</span>
             <a href="{{ route('booking.result', ['booking_code' => $booking->booking_code]) }}">Lihat Detail &gt;</a>
         </footer>

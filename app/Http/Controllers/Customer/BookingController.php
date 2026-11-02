@@ -184,6 +184,10 @@ class BookingController extends Controller
 
         $Result = collect();
         $queryBarberId = $barberId ? (int) $barberId : 1;
+        $dbSchedules = Schedule::query()
+            ->where('barber_id', $queryBarberId)
+            ->whereDate('date', $dateObj)
+            ->get();
         $slots = [
             ['id' => 1, 'start_time' => '15:00', 'end_time' => '15:30'],
             ['id' => 2, 'start_time' => '15:30', 'end_time' => '16:00'],
@@ -197,16 +201,18 @@ class BookingController extends Controller
             ['id' => 10, 'start_time' => '21:00', 'end_time' => '21:30'],
         ];
         foreach ($slots as $slot) {
+            $dbSchedule = $dbSchedules->firstWhere('start_time', $slot['start_time']);
             $isBooked = Booking::query()
                 ->where('barber_id', $queryBarberId)
                 ->whereDate('booking_date', $dateObj)
                 ->where('start_time', $slot['start_time'])
-                ->whereIn('status', ['pending', 'confirmed'])
+                ->whereIn('status', ['pending', 'confirmed', 'in_progress'])
                 ->exists();
 
             $slotTime = $dateObj->copy()->setTimeFromTimeString($slot['start_time']);
-            $sessionEnd = $slotTime->copy()->addMinutes(30);
-            $isBlocked = $isBooked || $now->gte($slotTime);
+            $isBlocked = ($dbSchedule ? ! $dbSchedule->is_available : false)
+                || $isBooked
+                || ($dateObj->format('Y-m-d') === today()->format('Y-m-d') && $now->gte($slotTime));
 
             $available = ! $isBlocked;
 

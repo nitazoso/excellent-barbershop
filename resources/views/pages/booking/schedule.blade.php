@@ -88,7 +88,8 @@
     function slotHtml(s) {
         const rest = s.start_time >= '18:00' && s.start_time < '19:30';
         const booked = !s.is_available || rest;
-        return `<button type="button" class="time-slot ${booked ? 'is-booked' : ''}" onclick="selectSlot(this, ${s.id}, '${s.start_time}')" ${booked ? 'disabled' : ''}>${s.start_time}</button>`;
+        const statusText = (!s.is_available || rest) ? 'Terkunci' : 'Terbuka';
+        return `<button type="button" class="time-slot ${booked ? 'is-booked' : ''}" onclick="selectSlot(this, ${s.id}, '${s.start_time}')" ${booked ? 'disabled' : ''}>${s.start_time}<br><span style="font-size:9px;font-weight:500;color:${booked ? '#777' : '#059669'};">${statusText}</span></button>`;
     }
 
     function selectSlot(el, scheduleId, timeStr) {

@@ -1,17 +1,10 @@
 <?php
 
-<<<<<<< HEAD
-use App\Http\Controllers\Admin\AdminManagementController;
-use App\Http\Controllers\Admin\BookingController as AdminBookingController;
-use App\Http\Controllers\Admin\DashboardController;
-use App\Http\Controllers\Admin\GoogleAuthController;
-=======
 use App\Http\Controllers\Admin\BarberController as AdminBarberController;
 use App\Http\Controllers\Admin\BookingController as AdminBookingController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ServiceController as AdminServiceController;
 use App\Http\Controllers\Admin\SettingController as AdminSettingController;
->>>>>>> d1fd5d604d1c0c98cc75b62623443ea7446e8400
 use App\Http\Controllers\Customer\BookingController;
 use App\Http\Controllers\Customer\BookingResultController;
 use App\Http\Controllers\Customer\CheckBookingController;
@@ -44,6 +37,16 @@ Route::get('/booking/result/{booking_code}/download', [BookingResultController::
 Route::get('/booking/result/{booking_code}', [BookingResultController::class, 'show'])
     ->name('booking.result');
 
+// Ubah jadwal & batalkan booking pelanggan
+Route::get('/booking/{booking_code}/reschedule', [BookingResultController::class, 'reschedule'])
+    ->name('booking.reschedule');
+Route::post('/booking/{booking_code}/reschedule', [BookingResultController::class, 'updateReschedule'])
+    ->name('booking.reschedule.update');
+Route::get('/booking/{booking_code}/cancel', [BookingResultController::class, 'cancel'])
+    ->name('booking.cancel');
+Route::post('/booking/{booking_code}/cancel', [BookingResultController::class, 'processCancel'])
+    ->name('booking.cancel.process');
+
 // Cek booking pelanggan
 Route::get('/cek-booking', [CheckBookingController::class, 'index'])
     ->name('booking.check');
@@ -55,7 +58,7 @@ Route::post('/cek-booking', [CheckBookingController::class, 'check'])
 $adminPath = config('services.admin.path', env('ADMIN_PATH', 'ctrl-excellent'));
 
 Route::prefix($adminPath)->name('admin.')->group(function () use ($adminPath): void {
-    Route::redirect('/', '/' . $adminPath . '/dashboard')->name('index');
+    Route::redirect('/', '/'.$adminPath.'/dashboard')->name('index');
 
     Route::middleware(['throttle:10,1'])->group(function (): void {
         Route::get('/login', [GoogleAuthController::class, 'showLogin'])->name('login');
