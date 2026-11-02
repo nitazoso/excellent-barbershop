@@ -339,9 +339,9 @@ body {
 .manifesto-label,
 .section-kicker {
         font-size: 9px;
-        letter-spacing: .30em;
+        letter-spacing: .12em;
         font-weight: 700;
-        color: var(--red);
+        color: var(--red)
 }
 
 .manifesto h2 {
@@ -1113,5 +1113,244 @@ body {
 
         .booking-result {
                 padding: 48px 20px
+        }
+}
+
+/* Shared small-screen behavior for public pages. */
+html,
+body {
+        max-width: 100%;
+        overflow-x: hidden
+}
+
+img,
+iframe,
+video {
+        max-width: 100%
+}
+
+button,
+input,
+select,
+textarea {
+        font: inherit
+}
+
+input,
+select,
+textarea {
+        max-width: 100%
+}
+
+.booking-page {
+        width: min(100%, 760px);
+        overflow-wrap: anywhere
+}
+
+.booking-page form {
+        display: grid;
+        gap: 10px;
+        margin-top: 20px
+}
+
+.booking-page form label {
+        font-size: 12px;
+        font-weight: 700
+}
+
+.booking-page form input {
+        width: 100%;
+        min-height: 44px;
+        padding: 10px 12px;
+        border: 1px solid var(--line);
+        border-radius: 6px
+}
+
+.booking-page form .primary {
+        justify-self: start;
+        border: 0;
+        cursor: pointer
+}
+
+.booking-results {
+        display: grid;
+        gap: 12px;
+        margin-top: 24px
+}
+
+.booking-results article {
+        min-width: 0;
+        padding: 16px;
+        border: 1px solid var(--line);
+        border-radius: 8px;
+        background: #fff;
+        overflow-wrap: anywhere
+}
+
+.booking-results h2 {
+        font-size: 16px;
+        margin: 0 0 8px
+}
+
+.booking-results p {
+        font-size: 13px;
+        line-height: 1.55;
+        margin: 5px 0;
+        color: var(--muted)
+}
+
+.booking-result p {
+        overflow-wrap: anywhere
+}
+
+.booking-stepper li {
+        min-width: 0
+}
+
+@media(max-width:900px) {
+        .nav {
+                gap: 12px
+        }
+
+        .nav-links {
+                display: none
+        }
+
+        .mobile-menu {
+                display: block
+        }
+
+        .nav-links.menu-open {
+                top: 56px
+        }
+}
+
+@media(max-width:420px) {
+        .frame {
+                padding: 0
+        }
+
+        .nav {
+                padding: 0 12px;
+                gap: 8px
+        }
+
+        .brand {
+                gap: 5px;
+                min-width: 0
+        }
+
+        .brand-name {
+                font-size: 10px;
+                white-space: normal;
+                line-height: 1.15
+        }
+
+        .volume {
+                font-size: 8px;
+                white-space: nowrap
+        }
+
+        .nav-cta {
+                font-size: 8px;
+                padding: 7px 8px
+        }
+
+        .main {
+                padding: 0 14px
+        }
+
+        .booking-page {
+                margin: 24px auto 48px;
+                padding: 20px 14px
+        }
+
+        .booking-page h1 {
+                font-size: clamp(28px, 9vw, 38px)
+        }
+
+        .booking-page>p {
+                font-size: 13px
+        }
+
+        .booking-result {
+                padding: 36px 14px
+        }
+
+        .booking-stepper {
+                gap: 9px;
+                margin: 24px 0
+        }
+
+        .booking-stepper li {
+                font-size: 11px
+        }
+
+        .hero h1 {
+                font-size: clamp(44px, 13vw, 58px)
+        }
+
+        .hero-buttons {
+                align-items: flex-start;
+                flex-direction: column;
+                gap: 13px
+        }
+
+        .metrics {
+                grid-template-columns: repeat(2, minmax(0, 1fr))
+        }
+
+        .location-card {
+                padding: 16px
+        }
+
+        .hours-row {
+                font-size: 11px;
+                gap: 8px
+        }
+
+        .hours-row strong {
+                font-size: 10px;
+                text-align: right
+        }
+
+        .contact-row {
+                flex-wrap: wrap
+        }
+
+        .footer {
+                font-size: 8px
+        }
+
+        .manifesto {
+                margin-left: -14px;
+                margin-right: -14px
+        }
+}
+
+@media(max-width:760px) {
+        .hero {
+                min-height: 0
+        }
+}
+
+@media(max-width:900px) {
+        .nav-links.menu-open {
+                position: absolute;
+                display: flex;
+                z-index: 3;
+                top: 56px;
+                left: 8px;
+                right: 8px;
+                padding: 20px;
+                background: var(--paper);
+                border: 1px solid var(--line);
+                flex-direction: column;
+                align-items: flex-start;
+                box-shadow: 0 8px 20px #0002
+        }
+
+        .nav-links.menu-open a {
+                padding: 5px
         }
 }

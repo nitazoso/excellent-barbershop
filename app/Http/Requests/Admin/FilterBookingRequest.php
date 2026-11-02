@@ -23,9 +23,10 @@ class FilterBookingRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'search' => ['nullable', 'string', 'max:100'],
             'start_date' => ['nullable', 'date'],
             'end_date' => ['nullable', 'date', 'after_or_equal:start_date'],
-            'status' => ['nullable', 'string', 'in:pending,confirmed,rejected'],
+            'status' => ['nullable', 'string', 'in:pending,confirmed,in_progress,completed,rejected,break'],
             'barber_id' => ['nullable', 'integer', 'exists:barbers,id'],
         ];
     }

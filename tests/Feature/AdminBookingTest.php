@@ -85,6 +85,45 @@ class AdminBookingTest extends TestCase
         $response->assertSee('John Doe');
     }
 
+    public function test_admin_can_create_a_manual_vip_booking_for_an_available_schedule(): void
+    {
+        $availableSchedule = Schedule::create([
+            'barber_id' => $this->barber->id,
+            'date' => now()->addDay()->toDateString(),
+            'start_time' => '13:00:00',
+            'end_time' => '14:00:00',
+            'is_available' => true,
+        ]);
+
+        $response = $this->post(route('admin.bookings.manual.store'), [
+            'customer_name' => 'Aris Munandar',
+            'customer_phone' => '081234567891',
+            'membership_type' => 'vip',
+            'service_id' => $this->service->id,
+            'barber_id' => $this->barber->id,
+            'schedule_id' => $availableSchedule->id,
+            'notes' => 'Pelanggan VIP',
+        ]);
+
+        $response->assertRedirect(route('admin.bookings'));
+        $this->assertDatabaseHas('customers', [
+            'phone' => '081234567891',
+            'membership_type' => 'vip',
+        ]);
+        $this->assertDatabaseHas('bookings', [
+            'customer_id' => Customer::query()->where('phone', '081234567891')->value('id'),
+            'schedule_id' => $availableSchedule->id,
+            'status' => 'pending',
+        ]);
+        $this->assertFalse((bool) $availableSchedule->fresh()->is_available);
+
+        $this->get(route('admin.bookings'))
+            ->assertOk()
+            ->assertSee('Aris Munandar')
+            ->assertSee('VIP Member')
+            ->assertSee('Gentleman Haircut');
+    }
+
     public function test_can_confirm_booking(): void
     {
         $booking = $this->createBooking(['status' => 'pending']);

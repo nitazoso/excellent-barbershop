@@ -13,6 +13,7 @@ class Customer extends Model
     protected $fillable = [
         'name',
         'phone',
+        'membership_type',
     ];
 
     public function bookings(): HasMany

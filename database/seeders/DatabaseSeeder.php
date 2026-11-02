@@ -17,11 +17,12 @@ class DatabaseSeeder extends Seeder
     {
         // User::factory(10)->create();
 
-        User::firstOrCreate(
+        User::query()->firstOrCreate(
             ['email' => 'test@example.com'],
-            ['name' => 'Test User']
+            ['name' => 'Studio Admin', 'password' => bcrypt('password')]
         );
 
-        $this->call(AdminSeeder::class);
+        $this->call(DashboardSeeder::class);
+        $this->call(PendingBookingSeeder::class);
     }
 }
